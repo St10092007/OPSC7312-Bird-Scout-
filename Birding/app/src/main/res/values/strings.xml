@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Birding</string>
+    <string name="ek_img_content">ExportKit Image</string>
+    <string name="___time_string">9:41</string>
+    <string name="login_with_email_string">Sign up</string>
+    <string name="name_string">Name</string>
+    <string name="email_ek2_string">Email</string>
+    <string name="password_string">Password</string>
+    <string name="signup_ek3_string">Signup</string>
+    <string name="___string">|</string>
+    <string name="login_string">Login</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

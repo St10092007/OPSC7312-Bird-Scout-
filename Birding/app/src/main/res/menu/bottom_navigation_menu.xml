@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_home"
+        android:title="Home"
+        android:icon="@drawable/home_icon_silhouette" />
+    <!--    "Icon made by Freepik from www.flaticon.com"-->
+
+    <item
+        android:id="@+id/menu_hotspots"
+        android:title="Hotspots"
+        android:icon="@drawable/location" />
+    <!--    "Icon made by RIkas Dzihab from www.flaticon.com"-->
+
+    <item
+        android:id="@+id/menu_observations"
+        android:title="Observations"
+        android:icon="@drawable/binoculars" />
+    <!--    "Icon made by Freepik from www.flaticon.com"-->
+
+    <item
+        android:id="@+id/menu_settings"
+        android:title="Settings"
+        android:icon="@drawable/settings" />
+<!--    "Icon made by Pixel perfect from www.flaticon.com"-->
+</menu>

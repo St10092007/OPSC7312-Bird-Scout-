@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    // color pallete
+    <color name="_bg__signup_ek2_color">#FFFFFF</color>
+    <color name="rectangle_54_color">#06C925</color>
+    <color name="login_with_email_color">#004575</color>
+    <color name="name_color">#EAEAEA</color>
+    <color name="signup_ek3_color">#E7AA0F</color>
+    <color name="login_color">#C4C4C4</color>
+
+</resources>
