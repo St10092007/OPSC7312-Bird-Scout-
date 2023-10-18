@@ -14,6 +14,10 @@
     <color name="login_with_email_color">#004575</color>
     <color name="name_color">#EAEAEA</color>
     <color name="signup_ek3_color">#E7AA0F</color>
-    <color name="login_color">#C4C4C4</color>
+    <color name="text_color">#FFFFFF</color>
+
+    <color name="primary_green">#4CAF50</color>
+    <color name="primary_red">#F44336</color>
+
 
 </resources>

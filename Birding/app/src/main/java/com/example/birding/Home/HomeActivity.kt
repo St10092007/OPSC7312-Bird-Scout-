@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.birding.Hotspot.HotspotsActivity
 import com.example.birding.R
+import com.example.birding.Settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 lateinit var bottomNavigationView: BottomNavigationView
@@ -35,7 +36,7 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.menu_settings -> {
                     // Handle Goals menu item
-//                    startActivity(Intent(this, SettingsActivity::class.java))
+                    startActivity(Intent(this, SettingsActivity::class.java))
                     true
                 }
                 else -> false

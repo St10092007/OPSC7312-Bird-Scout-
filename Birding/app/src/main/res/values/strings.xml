@@ -11,4 +11,12 @@
     <string name="login_string">Login</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="distance_values">
+        <item>1</item>
+        <item>2</item>
+        <!-- Add values up to 100 or as needed -->
+        <item>100</item>
+    </string-array>
+
 </resources>

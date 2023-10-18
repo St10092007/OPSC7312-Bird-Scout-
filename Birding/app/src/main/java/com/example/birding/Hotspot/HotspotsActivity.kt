@@ -44,6 +44,7 @@ import android.preference.PreferenceManager
 import androidx.core.content.ContextCompat
 import com.example.birding.Home.HomeActivity
 import com.example.birding.R
+import com.example.birding.Settings.SettingsActivity
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
@@ -109,7 +110,9 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 R.id.menu_settings -> {
                     // Handle settings menu item
-                     //startActivity(Intent(this, SettingsActivity::class.java))
+                     startActivity(Intent(this, SettingsActivity::class.java))
+
+
                     true
                 }
                 else -> false
@@ -273,25 +276,25 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun fetchEBirdHotspots(location: LatLng) {
 
         val apiKey = "h5qidkb3h7cv"
-        val distance = 15
+//        val distance = 15
 
-//        // Retrieve user preferences from SharedPreferences
-//        val unitPreference = sharedPreferences.getString("measurement_unit", "metric") // Use the correct preference key
-//        var maxDistance = sharedPreferences.getInt("max_distance", 10)
-//
-//        // Ensure maxDistance is in intervals of 10 and limit to 100
-//        maxDistance = if (maxDistance <= 100) {
-//            maxDistance - maxDistance % 10 // Round down to the nearest multiple of 10
-//        } else {
-//            100 // Set the maximum limit to 100
-//        }
-//
-//        // Convert maxDistance to kilometers if the user prefers miles
-//        val dist = if (unitPreference == "miles") {
-//            (maxDistance * 1.60934).toInt()
-//        } else {
-//            maxDistance
-//        }
+        // Retrieve user preferences from SharedPreferences
+        val unitPreference = sharedPreferences.getString("measurement_unit", "metric") // Use the correct preference key
+        var maxDistance = sharedPreferences.getInt("max_distance", 10)
+
+        // Ensure maxDistance is in intervals of 10 and limit to 100
+        maxDistance = if (maxDistance <= 100) {
+            maxDistance - maxDistance % 10 // Round down to the nearest multiple of 10
+        } else {
+            100 // Set the maximum limit to 100
+        }
+
+        // Convert maxDistance to kilometers if the user prefers miles
+        val distance = if (unitPreference == "miles") {
+            (maxDistance * 1.60934).toInt()
+        } else {
+            maxDistance
+        }
 
         // Build URL
         val eBirdAPIUrl =   "https://api.ebird.org/v2/ref/hotspot/geo?lat=${location.latitude}&lng=${location.longitude}&dist=${distance}&fmt=json"
