@@ -43,6 +43,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.preference.PreferenceManager
 import androidx.core.content.ContextCompat
 import com.example.birding.Home.HomeActivity
+import com.example.birding.Observations.ObservationsActivity
 import com.example.birding.R
 import com.example.birding.Settings.SettingsActivity
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -109,7 +110,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 R.id.menu_observations -> {
                     // Handle observations menu item
-//                    startActivity(Intent(this, observationsActivity::class.java))
+                    startActivity(Intent(this, ObservationsActivity::class.java))
                     true
                 }
                 R.id.menu_settings -> {

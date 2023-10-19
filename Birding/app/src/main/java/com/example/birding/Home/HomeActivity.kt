@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.birding.Hotspot.HotspotsActivity
+import com.example.birding.Observations.ObservationsActivity
 import com.example.birding.R
 import com.example.birding.Settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -31,7 +32,7 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.menu_observations -> {
                     // Handle observations menu item
-//                    startActivity(Intent(this, observations::class.java))
+                    startActivity(Intent(this, ObservationsActivity::class.java))
                     true
                 }
                 R.id.menu_settings -> {
