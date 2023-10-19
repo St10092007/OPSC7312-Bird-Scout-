@@ -315,7 +315,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun fetchEBirdHotspots(location: LatLng) {
 
         val apiKey = "h5qidkb3h7cv"
-
         // Retrieve user preferences from SharedPreferences
         val unitPreference = sharedPreferences.getString("measurement_unit", "metric") // Use the correct preference key
         var maxDistance = sharedPreferences.getInt("max_distance", 10)
@@ -548,19 +547,27 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Create a canvas to draw on the bitmap
         val canvas = Canvas(bitmap)
 
-        // Define the paint properties
+        // Define the paint properties for a blue circle
         val paint = Paint()
-        paint.color = Color.RED
-        paint.alpha = 50
+        paint.color = Color.parseColor("#004575") // Use your blue theme color
+        paint.alpha = 150 // Adjust the alpha (transparency) as needed
         paint.isAntiAlias = true
         paint.style = Paint.Style.FILL
 
-        // Draw a red circle on the canvas
+        // Draw a blue circle on the canvas
         canvas.drawCircle(circleRadius.toFloat(), circleRadius.toFloat(), circleRadius.toFloat(), paint)
+
+        val icon = BitmapFactory.decodeResource(resources, R.drawable.dove)
+        val iconSize = circleRadius * 2
+        val iconLeft = circleRadius - iconSize / 2
+        val iconTop = circleRadius - iconSize / 2
+        val iconRect = Rect(iconLeft, iconTop, iconLeft + iconSize, iconTop + iconSize)
+        canvas.drawBitmap(icon, null, iconRect, null)
 
         // Create a BitmapDescriptor from the custom marker image
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
+
     private fun removeCurrentRoute() {
         currentRoute?.remove()
         currentRoute = null
