@@ -6,10 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Hotspot.HotspotsActivity"
-    android:background="@color/primary_grey">
+    android:background="#D9D9D9">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
+        style="@style/CustomBottomNavigation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_navigation_menu"
@@ -60,7 +61,8 @@
                     android:textSize="20sp"
                     android:visibility="gone"
                     android:layout_weight="1"
-                    android:layout_marginTop="10dp"/>
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black"/>
 
                 <View
                     android:layout_width="0dp"
@@ -84,10 +86,11 @@
                 android:layout_height="50.6dp"
                 android:gravity="start"
                 android:text="Distance"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:visibility="gone"
                 android:layout_gravity="center_vertical"
-                android:layout_marginBottom="50dp"/>
+                android:layout_marginBottom="50dp"
+                android:textColor="@color/black"/>
         </LinearLayout>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
