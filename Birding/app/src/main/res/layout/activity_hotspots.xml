@@ -32,8 +32,8 @@
         android:layout_height="100dp"
         android:layout_marginStart="18dp"
         android:layout_marginEnd="18dp"
-        android:background="@drawable/hotspot_detail_box"
         android:visibility="gone"
+        android:background="@color/primary_grey"
         app:layout_constraintTop_toBottomOf="@+id/mapView"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,31 +45,28 @@
             android:orientation="vertical"
             android:layout_gravity="center_vertical">
 
-            <!-- Nested LinearLayout for horizontal alignment -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center_vertical">
 
-                <!-- Set gravity to "start" for left alignment -->
                 <TextView
                     android:id="@+id/selectedHotspot"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:gravity="start"
-                    android:text="Selected HotSpot is too long and should be truncated"
+                    android:text=""
                     android:textSize="20sp"
                     android:visibility="gone"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:layout_marginTop="10dp"/>
 
-                <!-- Use a placeholder View with layout_weight to push the Button to the right -->
                 <View
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_weight="0" />
 
-                <!-- Center the Button vertically within its space -->
                 <Button
                     android:id="@+id/hotspotDirectionBtn"
                     android:background="@color/primary_blue"
@@ -78,10 +75,9 @@
                     android:layout_height="54dp"
                     android:visibility="gone"
                     android:layout_gravity="center_vertical"
-                    />
+                    android:layout_marginTop="20dp" />
             </LinearLayout>
 
-            <!-- Center the TextView vertically within its space -->
             <TextView
                 android:id="@+id/distanceToHotspot"
                 android:layout_width="match_parent"
@@ -90,7 +86,8 @@
                 android:text="Distance"
                 android:textSize="16sp"
                 android:visibility="gone"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginBottom="50dp"/>
         </LinearLayout>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -239,11 +239,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
 
-        hotspotDirectionBtn.apply {
-            text = "Stop"
-            setBackgroundColor(Color.RED)
-        }
-
         hotspotDirectionBtn.setOnClickListener {
             if (isNavigating) {
                 // User is navigating; stop the navigation
@@ -556,7 +551,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Define the paint properties
         val paint = Paint()
         paint.color = Color.RED
-        paint.alpha = 20
+        paint.alpha = 50
         paint.isAntiAlias = true
         paint.style = Paint.Style.FILL
 
