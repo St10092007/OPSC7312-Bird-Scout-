@@ -72,7 +72,7 @@
                 <!-- Center the Button vertically within its space -->
                 <Button
                     android:id="@+id/hotspotDirectionBtn"
-                    android:background="@drawable/hotspot_button"
+                    android:background="@color/primary_blue"
                     android:text="Get Directions"
                     android:layout_width="wrap_content"
                     android:layout_height="54dp"

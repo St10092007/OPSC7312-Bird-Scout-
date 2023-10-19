@@ -64,6 +64,9 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var sharedPreferences: SharedPreferences
+    private var isNavigating = false
+    private var isMetric: Boolean = true
+    private var maxDistance: Int = 50
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +89,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             fetchLastLocation { location ->
                 location?.let {
                     fetchEBirdHotspots(LatLng(location.latitude, location.longitude))
+                    loadPreferences()
                 }
             }
         }
@@ -119,6 +123,13 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+
+    private fun loadPreferences() {
+        val settings = getSharedPreferences(SettingsActivity.PREFERENCES_NAME, MODE_PRIVATE)
+        isMetric = settings.getBoolean(SettingsActivity.IS_METRIC_PREFERENCE_KEY, true)
+        maxDistance = settings.getInt(SettingsActivity.MAX_DISTANCE_PREFERENCE_KEY, 50)
+    }
+
 
     // Location and Permissions
     private fun requestLocationPermission() {
@@ -177,7 +188,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Check if the clicked marker is the same as the previously selected marker
         if (selectedMarker == marker) {
             // Hide the hotspot details
-            selectedMarker?.setIcon(createCustomMarkerEbird(this,50))
+            selectedMarker?.setIcon(createCustomMarkerbird(this,50))
             hotspotDetailsFrameLayout.visibility = View.GONE
             selectedMarker = null // Deselect the marker
             return
@@ -190,7 +201,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         distanceToHotspot.visibility = View.GONE
 
         // Select the clicked marker (show hotspot details)
-        selectedMarker?.setIcon(createCustomMarkerEbird(this,50))
+        selectedMarker?.setIcon(createCustomMarkerbird(this,50))
         selectedMarker = marker
         selectedMarker?.setIcon(createCustomMarker())
         selectedMarker?.zIndex = 2.0f
@@ -203,28 +214,61 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         selectedHotspot.visibility = View.VISIBLE
         hotspotDirectionBtn.visibility = View.VISIBLE
 
-        // Calculate the distance
+        // Calculate and display the distance
         val origin = location?.let { LatLng(it.latitude, it.longitude) }
         if (origin != null) {
             val distance = calculateDistance(origin, marker.position)
-            val formattedDistance = if (distance > 1000) {
-                val distanceInKm = distance / 1000.0
-                String.format("%.2f km", distanceInKm)
+
+            // Update the distance based on user preferences
+            val formattedDistance = if (isMetric) {
+                if (distance > 1000) {
+                    val distanceInKm = distance / 1000.0
+                    String.format("%.2f km", distanceInKm)
+                } else {
+                    String.format("%.2f meters", distance)
+                }
             } else {
-                String.format("%.2f meters", distance)
+                val miles = distance * 0.000621371  // Convert meters to miles
+                String.format("%.2f mi", miles)
             }
+
             distanceToHotspot.text = "Distance: $formattedDistance"
             distanceToHotspot.visibility = View.VISIBLE
         } else {
             distanceToHotspot.visibility = View.GONE
         }
 
+
+        hotspotDirectionBtn.apply {
+            text = "Stop"
+            setBackgroundColor(Color.RED)
+        }
+
         hotspotDirectionBtn.setOnClickListener {
-            // Calculate and display the route to the selected hotspot
-            if (origin != null) {
+            if (isNavigating) {
+                // User is navigating; stop the navigation
+                isNavigating = false
                 removeCurrentRoute() // Remove the previous route
-                calculateAndDisplayRoute(origin, marker.position)
+                resetDirectionButton() // Reset the button appearance
+            } else {
+                // User is not navigating; start navigation
+                isNavigating = true
+                hotspotDirectionBtn.apply {
+                    text = "Stop"
+                    setBackgroundColor(Color.RED)
+                }
+                // Calculate and display the route to the selected hotspot
+                if (origin != null) {
+                    calculateAndDisplayRoute(origin, marker.position)
+                }
             }
+        }
+    }
+
+    private fun resetDirectionButton() {
+        hotspotDirectionBtn.apply {
+            text = "Get Directions"
+            setBackgroundColor(ContextCompat.getColor(this@HotspotsActivity, R.color.primary_blue))
         }
     }
     private fun calculateDistance(origin: LatLng, destination: LatLng): Float {
@@ -276,18 +320,10 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun fetchEBirdHotspots(location: LatLng) {
 
         val apiKey = "h5qidkb3h7cv"
-//        val distance = 15
 
         // Retrieve user preferences from SharedPreferences
         val unitPreference = sharedPreferences.getString("measurement_unit", "metric") // Use the correct preference key
         var maxDistance = sharedPreferences.getInt("max_distance", 10)
-
-        // Ensure maxDistance is in intervals of 10 and limit to 100
-        maxDistance = if (maxDistance <= 100) {
-            maxDistance - maxDistance % 10 // Round down to the nearest multiple of 10
-        } else {
-            100 // Set the maximum limit to 100
-        }
 
         // Convert maxDistance to kilometers if the user prefers miles
         val distance = if (unitPreference == "miles") {
@@ -297,14 +333,12 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         // Build URL
-        val eBirdAPIUrl =   "https://api.ebird.org/v2/ref/hotspot/geo?lat=${location.latitude}&lng=${location.longitude}&dist=${distance}&fmt=json"
+        val eBirdAPIUrl ="https://api.ebird.org/v2/ref/hotspot/geo?lat=${location.latitude}&lng=${location.longitude}&dist=${distance}&fmt=json"
 
-        //"https://api.ebird.org/v2/ref/hotspot/info/${L1428644}"
         // Create URL object
         var url: URL? = null
         try {
             url = URL(eBirdAPIUrl)
-
             thread {
                 try {
                     // Create an HTTP URL connection
@@ -342,12 +376,11 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                                     // Add markers for each hotspot
                                     runOnUiThread {
-
                                         googleMap.addMarker(
                                             MarkerOptions()
                                             .position(hotspotLocation)
                                             .title(name)
-                                            .icon(createCustomMarkerEbird(this,50))
+                                            .icon(createCustomMarkerbird(this,50))
                                             .zIndex(1.0f))
                                     }
                                 }
@@ -370,7 +403,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                             Toast.makeText(this@HotspotsActivity, "HTTP error: $responseCode", Toast.LENGTH_SHORT).show()
                         }
                     }
-
                     // Close the connection
                     connection.disconnect()
                 } catch (e: Exception) {
@@ -386,7 +418,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
     private fun calculateAndDisplayRoute(origin: LatLng, destination: LatLng) {
-        val apiKey = "AIzaSyDHTmCbWEXU66wNV7hIIhaBPPJqXjnJX6I" // Replace with your Google Cloud API key
+        val apiKey = "AIzaSyDHTmCbWEXU66wNV7hIIhaBPPJqXjnJX6I"
         val geoApiContext = GeoApiContext.Builder()
             .apiKey(apiKey)
             .build()
@@ -421,7 +453,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                         val bounds = builder.build()
 
                         // Move the camera to center on the route with padding
-                        val padding = 100 // You can adjust the padding as needed
+                        val padding = 100
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
                     }
                 } else {
@@ -498,7 +530,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         return decoded
     }
-    private fun createCustomMarkerEbird(context: Context, targetSize: Int): BitmapDescriptor {
+    private fun createCustomMarkerbird(context: Context, targetSize: Int): BitmapDescriptor {
         // Load the dove icon from your drawables
         val doveIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.dove)
 
@@ -524,7 +556,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Define the paint properties
         val paint = Paint()
         paint.color = Color.RED
-        paint.alpha = 30
+        paint.alpha = 20
         paint.isAntiAlias = true
         paint.style = Paint.Style.FILL
 
