@@ -10,7 +10,11 @@
 
     // color pallete
     <color name="text_color">#FFFFFF</color>
-    <color name="primary_blue">#004575</color>
+    <color name="primary_blue">#336A86</color>
+    <color name="secondary">#8EAEC4</color>
+    <color name="accent">#283132</color>
+
+
     <color name="primary_green">#4CAF50</color>
     <color name="primary_red">#F44336</color>
     <color name="primary_grey">#C0C0C0</color>

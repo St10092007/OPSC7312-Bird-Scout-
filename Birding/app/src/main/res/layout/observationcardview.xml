@@ -5,8 +5,9 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     app:cardBackgroundColor="@android:color/white"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="5dp">
+    app:cardCornerRadius="12dp"
+    app:cardElevation="20dp"
+    android:backgroundTint="@color/accent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,37 +16,47 @@
         android:padding="16dp">
 
         <TextView
+            android:id="@+id/headingTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Observation"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:textColor="@color/secondary" />
+
+        <TextView
             android:id="@+id/speciesTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Bird Species:"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/black" />
+            android:textColor="@color/text_color" />
 
         <TextView
             android:id="@+id/dateTimeTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Date and Time:"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
+            android:textSize="18sp"
+            android:textColor="@color/text_color" />
 
         <TextView
             android:id="@+id/locationTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Location (Latitude, Longitude):"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
+            android:textSize="18sp"
+            android:textColor="@color/text_color" />
 
         <TextView
             android:id="@+id/notesTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:text="Notes:"
-            android:textSize="16sp"
-            android:textColor="@color/black" />
+            android:textSize="18sp"
+            android:textColor="@color/text_color"
+            />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -1,98 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Settings.ProfileActivity"
-    android:background="@drawable/background"
-    android:orientation="vertical">
+    android:background="@color/primary_grey">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/logobackground"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Profile"
         android:textAlignment="center"
-        android:textColor="@color/primary_blue"
+        android:textColor="@color/secondary"
         android:textSize="30sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="32dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/profileName"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/profileEmail"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
-
-    <EditText
-        android:layout_width="372dp"
-        android:layout_height="50dp"
-        android:id="@+id/editProfileName"
-        android:textColorHint="@color/text_color"
-        android:textColor="@color/text_color"
-        android:hint="Name"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
-    <EditText
-        android:id="@+id/editProfileSurname"
-        android:layout_width="372dp"
-        android:layout_height="52dp"
         android:layout_marginTop="16dp"
-        android:textColorHint="@color/text_color"
-        android:textColor="@color/text_color"
-        android:hint="Surname"
-        android:layout_gravity="center_horizontal"/>
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <EditText
-        android:layout_width="372dp"
-        android:layout_height="50dp"
-        android:id="@+id/editProfileEmail"
-        android:textColorHint="@color/text_color"
-        android:textColor="@color/text_color"
-        android:hint="Email"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp" />
+    <!-- Main Container -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp"
+        android:backgroundTint="@color/accent"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+            <!-- Profile Information -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profileName"
+                android:layout_marginTop="16dp"
+                android:textSize="20dp"
+                android:textColor="@color/text_color"
+               />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profileSurname"
+                android:layout_marginTop="16dp"
+                android:textSize="20dp"
+                android:textColor="@color/text_color"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/profileEmail"
+                android:layout_marginTop="16dp"
+                android:textSize="20dp"
+                android:textColor="@color/text_color"
+                />
+
+            <!-- Edit Text Fields -->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/editProfileName"
+                android:textColorHint="@color/text_color"
+                android:textColor="@color/text_color"
+                android:hint="Name"
+                android:textSize="20dp"
+                android:layout_marginTop="16dp" />
+
+            <EditText
+                android:id="@+id/editProfileSurname"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="16dp"
+                android:textColorHint="@color/text_color"
+                android:textColor="@color/text_color"
+                android:hint="Surname" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/editProfileEmail"
+                android:textColorHint="@color/text_color"
+                android:textColor="@color/text_color"
+                android:hint="Email"
+                android:layout_marginTop="16dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Buttons -->
+    <GridLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/cardView"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/backBtn"
-            android:text="Back"
-            android:backgroundTint="@color/primary_red"
-            android:textColor="@color/text_color"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="20dp"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/saveProfileBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_marginStart="16dp"
             android:text="Edit"
             android:backgroundTint="@color/primary_blue"
-            android:textColor="@color/text_color"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp" />
+            android:textColor="@color/text_color" />
 
-
-
-    </LinearLayout>
-
-</LinearLayout>
+        <Button
+            android:id="@+id/backBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="16dp"
+            android:text="Back"
+            android:backgroundTint="@color/secondary"
+            android:textColor="@color/text_color" />
+    </GridLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

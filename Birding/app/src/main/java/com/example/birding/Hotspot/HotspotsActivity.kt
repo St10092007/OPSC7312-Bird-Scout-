@@ -17,8 +17,6 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
@@ -41,13 +39,17 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.drawable.BitmapDrawable
 import android.preference.PreferenceManager
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import com.example.birding.Home.HomeActivity
 import com.example.birding.Observations.ObservationsActivity
 import com.example.birding.R
 import com.example.birding.Settings.SettingsActivity
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 
 class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -63,6 +65,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var distanceToHotspot: TextView
     private var currentRoute: Polyline? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var sharedPreferences: SharedPreferences
     private var isNavigating = false
@@ -94,9 +97,31 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         }
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                p0.lastLocation?.let { newLocation ->
+                    // Handle the new location here
+                    location = newLocation
+                    centerMapOnUserLocation()
+                }
+            }
+        }
+
         // navigation
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.menu_hotspots
+
+        val observationMenuItem = bottomNavigationView.menu.findItem(R.id.menu_observations)
+        val hotspotsMenuItem = bottomNavigationView.menu.findItem(R.id.menu_hotspots)
+        val homeMenuItem = bottomNavigationView.menu.findItem(R.id.menu_home)
+        val settingsMenuItem = bottomNavigationView.menu.findItem(R.id.menu_settings)
+
+        observationMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Observations") }
+        hotspotsMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Hotspots") }
+        homeMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Home") }
+        settingsMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Settings") }
+
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_home -> {
@@ -104,8 +129,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                     true
                 }
                 R.id.menu_hotspots -> {
-                    // Handle hotspots menu item
-                    // already on hotspots
                     true
                 }
                 R.id.menu_observations -> {
@@ -116,8 +139,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                 R.id.menu_settings -> {
                     // Handle settings menu item
                      startActivity(Intent(this, SettingsActivity::class.java))
-
-
                     true
                 }
                 else -> false
@@ -173,13 +194,14 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                     true // Indicate that the click event has been consumed
                 }
 
-                // Set a click listener for the "My Location" button
+
                 googleMap.setOnMyLocationButtonClickListener {
                     centerMapOnUserLocation()
                     true
                 }
             } catch (securityException: SecurityException) {
-                // Handle the SecurityException, typically by requesting permissions or displaying a message to the user
+                Toast.makeText(this, "Location permission is required for this operation", Toast.LENGTH_SHORT).show()
+                requestLocationPermission()
             }
         }
     }
@@ -189,7 +211,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Check if the clicked marker is the same as the previously selected marker
         if (selectedMarker == marker) {
             // Hide the hotspot details
-            selectedMarker?.setIcon(createCustomMarkerbird(this,50))
+            selectedMarker?.setIcon(createCustomMarkerbird(this,100))
             hotspotDetailsFrameLayout.visibility = View.GONE
             selectedMarker = null // Deselect the marker
             return
@@ -202,7 +224,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         distanceToHotspot.visibility = View.GONE
 
         // Select the clicked marker (show hotspot details)
-        selectedMarker?.setIcon(createCustomMarkerbird(this,50))
+        selectedMarker?.setIcon(createCustomMarkerbird(this,100))
         selectedMarker = marker
         selectedMarker?.setIcon(createCustomMarker())
         selectedMarker?.zIndex = 2.0f
@@ -235,6 +257,15 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             distanceToHotspot.text = "Distance: $formattedDistance"
             distanceToHotspot.visibility = View.VISIBLE
+            val builder = LatLngBounds.builder()
+            builder.include(origin)
+            builder.include(marker.position)
+            val bounds = builder.build()
+
+            // Move the camera to focus on the bounding box
+            val padding = 100 // Adjust the padding as needed
+            val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
+            googleMap.animateCamera(cameraUpdate)
         } else {
             distanceToHotspot.visibility = View.GONE
         }
@@ -244,8 +275,9 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (isNavigating) {
                 // User is navigating; stop the navigation
                 isNavigating = false
-                removeCurrentRoute() // Remove the previous route
-                resetDirectionButton() // Reset the button appearance
+                removeCurrentRoute()
+                resetDirectionButton()
+                stopLocationUpdates()
             } else {
                 // User is not navigating; start navigation
                 isNavigating = true
@@ -253,6 +285,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                     text = "Stop"
                     setBackgroundColor(Color.RED)
                 }
+                startLocationUpdates()
                 // Calculate and display the route to the selected hotspot
                 if (origin != null) {
                     calculateAndDisplayRoute(origin, marker.position)
@@ -307,7 +340,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                     googleMap.addMarker(
                         MarkerOptions().position(userLocation).title("You are here")
                     )
-
                     // Call the callback with the user's location
                     callback(location)
                 }
@@ -317,7 +349,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val apiKey = "h5qidkb3h7cv"
         // Retrieve user preferences from SharedPreferences
-        val unitPreference = sharedPreferences.getString("measurement_unit", "metric") // Use the correct preference key
+        val unitPreference = sharedPreferences.getString("measurement_unit", "metric")
         var maxDistance = sharedPreferences.getInt("max_distance", 10)
 
         // Convert maxDistance to kilometers if the user prefers miles
@@ -360,7 +392,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                             if (responseString.startsWith("[")) {
                                 // Valid JSON array response
                                 val hotspotsArray = JSONArray(responseString)
-//                                val locIds = mutableListOf<String>()
                                 // Process the JSON array here
                                 for (i in 0 until hotspotsArray.length()) {
                                     val hotspot = hotspotsArray.getJSONObject(i)
@@ -375,7 +406,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                                             MarkerOptions()
                                             .position(hotspotLocation)
                                             .title(name)
-                                            .icon(createCustomMarkerbird(this,50))
+                                            .icon(createCustomMarkerbird(this,100))
                                             .zIndex(1.0f))
                                     }
                                 }
@@ -466,6 +497,29 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
         })
+    }
+
+    private fun startLocationUpdates() {
+        val locationRequest = LocationRequest()
+            .setInterval(10000) // Update interval in milliseconds
+            .setFastestInterval(5000) // Fastest update interval
+            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    private fun stopLocationUpdates() {
+        fusedLocationClient.removeLocationUpdates(locationCallback)
     }
 
     // Lifecycle Management
