@@ -45,6 +45,9 @@ import com.example.birding.Home.HomeActivity
 import com.example.birding.Observations.ObservationsActivity
 import com.example.birding.R
 import com.example.birding.Settings.SettingsActivity
+import com.example.birding.Settings.SettingsActivity.Companion.IS_METRIC_PREFERENCE_KEY
+import com.example.birding.Settings.SettingsActivity.Companion.MAX_DISTANCE_PREFERENCE_KEY
+import com.example.birding.Settings.SettingsActivity.Companion.PREFERENCES_NAME
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -69,8 +72,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var sharedPreferences: SharedPreferences
     private var isNavigating = false
-    private var isMetric: Boolean = true
-    private var maxDistance: Int = 50
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,9 +82,11 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         hotspotDetailsFrameLayout = findViewById(R.id.hotspotDetailsFrameLayout)
         distanceToHotspot = findViewById(R.id.distanceToHotspot)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
+
+        sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
+
 
         // Check for location permissions and request them if necessary
         if (!hasLocationPermission()) {
@@ -93,7 +96,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             fetchLastLocation { location ->
                 location?.let {
                     fetchEBirdHotspots(LatLng(location.latitude, location.longitude))
-                    loadPreferences()
+
                 }
             }
         }
@@ -145,13 +148,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
-    private fun loadPreferences() {
-        val settings = getSharedPreferences(SettingsActivity.PREFERENCES_NAME, MODE_PRIVATE)
-        isMetric = settings.getBoolean(SettingsActivity.IS_METRIC_PREFERENCE_KEY, true)
-        maxDistance = settings.getInt(SettingsActivity.MAX_DISTANCE_PREFERENCE_KEY, 50)
-    }
-
 
     // Location and Permissions
     private fun requestLocationPermission() {
@@ -237,13 +233,15 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         selectedHotspot.visibility = View.VISIBLE
         hotspotDirectionBtn.visibility = View.VISIBLE
 
+        val unitPreference = sharedPreferences.getBoolean("isMetric", true)
+
         // Calculate and display the distance
         val origin = location?.let { LatLng(it.latitude, it.longitude) }
         if (origin != null) {
             val distance = calculateDistance(origin, marker.position)
 
             // Update the distance based on user preferences
-            val formattedDistance = if (isMetric) {
+            val formattedDistance = if (unitPreference) {
                 if (distance > 1000) {
                     val distanceInKm = distance / 1000.0
                     String.format("%.2f km", distanceInKm)
@@ -349,18 +347,27 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val apiKey = "h5qidkb3h7cv"
         // Retrieve user preferences from SharedPreferences
-        val unitPreference = sharedPreferences.getString("measurement_unit", "metric")
-        var maxDistance = sharedPreferences.getInt("max_distance", 10)
+//        val unitPreference = sharedPreferences.getBoolean("isMetric", true)
+//        var maxDistance = sharedPreferences.getInt("maxDistance", 10)
+
+        val selectedUnit = sharedPreferences.getString(IS_METRIC_PREFERENCE_KEY, "Kilometers") ?: "Kilometers"
+        val selectedDistance = sharedPreferences.getInt(MAX_DISTANCE_PREFERENCE_KEY, 50)
+        Log.e("MyApp", "Max distance : $selectedDistance")
+        Log.e("MyApp", "unitPreference : $selectedUnit")
 
         // Convert maxDistance to kilometers if the user prefers miles
-        val distance = if (unitPreference == "miles") {
-            (maxDistance * 1.60934).toInt()
+        val convertedDistance = if (selectedUnit == "Kilometers") {
+            selectedDistance // No need to convert, as it's already in kilometers
         } else {
-            maxDistance
+            // Convert miles to kilometers
+            kilometersToMiles(selectedDistance)
         }
+        Log.e("MyApp", "converted distance : $convertedDistance")
 
         // Build URL
-        val eBirdAPIUrl ="https://api.ebird.org/v2/ref/hotspot/geo?lat=${location.latitude}&lng=${location.longitude}&dist=${distance}&fmt=json"
+        val eBirdAPIUrl ="https://api.ebird.org/v2/ref/hotspot/geo?lat=${location.latitude}&lng=${location.longitude}&dist=${convertedDistance}&fmt=json"
+
+        Log.d("MyApp", "Constructed URL: $eBirdAPIUrl")
 
         // Create URL object
         var url: URL? = null
@@ -377,12 +384,13 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     // Get the response code
                     val responseCode = connection.responseCode
-
+                    Log.d("MyApp", "Response Code: $responseCode")
                     // Check if the request was successful (HTTP status code 200)
                     if (responseCode == HttpURLConnection.HTTP_OK) {
                         // Fetch data from the connection
                         val inputStream = connection.inputStream
                         val urlData = inputStream.bufferedReader().use { it.readText() }
+                        Log.d("MyApp", "Response Data: $urlData")
 
                         // Parse JSON data
                         try {
@@ -443,6 +451,11 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             e.printStackTrace()
         }
     }
+
+    private fun kilometersToMiles(kilometers: Int): Int {
+        return (kilometers / 1.60934).toInt()
+    }
+
     private fun calculateAndDisplayRoute(origin: LatLng, destination: LatLng) {
         val apiKey = "AIzaSyDHTmCbWEXU66wNV7hIIhaBPPJqXjnJX6I"
         val geoApiContext = GeoApiContext.Builder()

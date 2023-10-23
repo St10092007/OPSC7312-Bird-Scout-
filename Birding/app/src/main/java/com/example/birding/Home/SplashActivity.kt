@@ -11,7 +11,7 @@ import com.example.birding.Authentication.RegisterActivity
 import com.example.birding.R
 
 
-val SPLASH_DELAY: Long = 5000 // 5 seconds
+val SPLASH_DELAY: Long = 2000
 
 class SplashActivity : AppCompatActivity() {
 
