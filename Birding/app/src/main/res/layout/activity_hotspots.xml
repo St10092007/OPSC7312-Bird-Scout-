@@ -52,7 +52,7 @@
                 android:layout_gravity="center_vertical">
 
                 <TextView
-                    android:id="@+id/selectedHotspot"
+                    android:id="@+id/tvSelectedHotspot"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:gravity="start"
@@ -69,7 +69,7 @@
                     android:layout_weight="0" />
 
                 <Button
-                    android:id="@+id/hotspotDirectionBtn"
+                    android:id="@+id/btnHotspotDirection"
                     android:background="@color/primary_blue"
                     android:text="Get Directions"
                     android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/distanceToHotspot"
+                android:id="@+id/tvDistanceToHotspot"
                 android:layout_width="match_parent"
                 android:layout_height="50.6dp"
                 android:gravity="start"

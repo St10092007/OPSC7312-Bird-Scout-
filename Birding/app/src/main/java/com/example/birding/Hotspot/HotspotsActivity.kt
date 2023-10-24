@@ -38,7 +38,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.drawable.BitmapDrawable
-import android.preference.PreferenceManager
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
 import com.example.birding.Home.HomeActivity
@@ -77,10 +76,10 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotspots)
         mapView = findViewById(R.id.mapView)
-        selectedHotspot = findViewById(R.id.selectedHotspot)
-        hotspotDirectionBtn = findViewById(R.id.hotspotDirectionBtn)
+        selectedHotspot = findViewById(R.id.tvSelectedHotspot)
+        hotspotDirectionBtn = findViewById(R.id.btnHotspotDirection)
         hotspotDetailsFrameLayout = findViewById(R.id.hotspotDetailsFrameLayout)
-        distanceToHotspot = findViewById(R.id.distanceToHotspot)
+        distanceToHotspot = findViewById(R.id.tvDistanceToHotspot)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -189,8 +188,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                     toggleHotspotDetails(marker)
                     true // Indicate that the click event has been consumed
                 }
-
-
                 googleMap.setOnMyLocationButtonClickListener {
                     centerMapOnUserLocation()
                     true
@@ -207,20 +204,20 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Check if the clicked marker is the same as the previously selected marker
         if (selectedMarker == marker) {
             // Hide the hotspot details
-            selectedMarker?.setIcon(createCustomMarkerbird(this,100))
+            selectedMarker?.setIcon(customMarkerBird(this,100))
             hotspotDetailsFrameLayout.visibility = View.GONE
             selectedMarker = null // Deselect the marker
             return
         }
 
         // Remove the previous route if it exists
-        removeCurrentRoute()
+        removeRoute()
 
         // Hide the distance text
         distanceToHotspot.visibility = View.GONE
 
         // Select the clicked marker (show hotspot details)
-        selectedMarker?.setIcon(createCustomMarkerbird(this,100))
+        selectedMarker?.setIcon(customMarkerBird(this,100))
         selectedMarker = marker
         selectedMarker?.setIcon(createCustomMarker())
         selectedMarker?.zIndex = 2.0f
@@ -249,7 +246,8 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                     String.format("%.2f meters", distance)
                 }
             } else {
-                val miles = distance * 0.000621371  // Convert meters to miles
+                // Convert meters to miles
+                val miles = distance * 0.000621371
                 String.format("%.2f mi", miles)
             }
 
@@ -261,7 +259,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             val bounds = builder.build()
 
             // Move the camera to focus on the bounding box
-            val padding = 100 // Adjust the padding as needed
+            val padding = 100
             val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
             googleMap.animateCamera(cameraUpdate)
         } else {
@@ -273,7 +271,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             if (isNavigating) {
                 // User is navigating; stop the navigation
                 isNavigating = false
-                removeCurrentRoute()
+                removeRoute()
                 resetDirectionButton()
                 stopLocationUpdates()
             } else {
@@ -347,13 +345,8 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val apiKey = "h5qidkb3h7cv"
         // Retrieve user preferences from SharedPreferences
-//        val unitPreference = sharedPreferences.getBoolean("isMetric", true)
-//        var maxDistance = sharedPreferences.getInt("maxDistance", 10)
-
         val selectedUnit = sharedPreferences.getString(IS_METRIC_PREFERENCE_KEY, "Kilometers") ?: "Kilometers"
         val selectedDistance = sharedPreferences.getInt(MAX_DISTANCE_PREFERENCE_KEY, 50)
-        Log.e("MyApp", "Max distance : $selectedDistance")
-        Log.e("MyApp", "unitPreference : $selectedUnit")
 
         // Convert maxDistance to kilometers if the user prefers miles
         val convertedDistance = if (selectedUnit == "Kilometers") {
@@ -364,10 +357,15 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         Log.e("MyApp", "converted distance : $convertedDistance")
 
+        // EBIRD API 2.0
+        // link : https://documenter.getpostman.com/view/664302/S1ENwy59#c9947c5c-2dce-4c6d-9911-7d702235506c
         // Build URL
         val eBirdAPIUrl ="https://api.ebird.org/v2/ref/hotspot/geo?lat=${location.latitude}&lng=${location.longitude}&dist=${convertedDistance}&fmt=json"
 
-        Log.d("MyApp", "Constructed URL: $eBirdAPIUrl")
+
+        //The following code was taken and modified from the OPEN SOURCE CODING (INTERMEDIATE) MODULE MANUAL 2023
+        //Author : The Independent Institute of Education (The IIE)
+        //Unpublished
 
         // Create URL object
         var url: URL? = null
@@ -414,7 +412,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                                             MarkerOptions()
                                             .position(hotspotLocation)
                                             .title(name)
-                                            .icon(createCustomMarkerbird(this,100))
+                                            .icon(customMarkerBird(this,100))
                                             .zIndex(1.0f))
                                     }
                                 }
@@ -458,6 +456,12 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun calculateAndDisplayRoute(origin: LatLng, destination: LatLng) {
         val apiKey = "AIzaSyDHTmCbWEXU66wNV7hIIhaBPPJqXjnJX6I"
+
+        //Some Portions of this code are modifications based on work created and shared by Google and used according to terms described in the Creative Commons 4.0 Attribution License.
+        //Author: Google
+        //Date: Last updated 2023-10-23
+        //link : https://developer.android.com/training/maps/maps-and-places
+
         val geoApiContext = GeoApiContext.Builder()
             .apiKey(apiKey)
             .build()
@@ -471,7 +475,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun onResult(result: DirectionsResult?) {
                 if (result != null) {
                     // Remove the previous route if it exists
-                    removeCurrentRoute()
+                    removeRoute()
 
                     // Draw the route on the map
                     val decodedPath = decodePolyline(result.routes[0].overviewPolyline.encodedPath)
@@ -511,6 +515,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
     }
+
 
     private fun startLocationUpdates() {
         val locationRequest = LocationRequest()
@@ -554,6 +559,10 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     // Marker and Drawing Functions
+    //The following code was taken and modified from StackOverflow
+    //Author: Jaskaran Singh
+    //Date: 4 October 2016
+    //link : https://stackoverflow.com/a/39851340
     fun decodePolyline(polyline: String): List<LatLng> {
         val len = polyline.length
         var index = 0
@@ -592,7 +601,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         return decoded
     }
-    private fun createCustomMarkerbird(context: Context, targetSize: Int): BitmapDescriptor {
+    private fun customMarkerBird(context: Context, targetSize: Int): BitmapDescriptor {
         // Load the dove icon from your drawables
         val doveIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.dove)
 
@@ -605,20 +614,21 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             throw IllegalArgumentException("Invalid drawable")
         }
     }
+
+    //Some Portions of this code are modifications based on work created and shared by Google and used according to terms described in the Creative Commons 4.0 Attribution License.
+    //Author: Google
+    //Date: Last updated 2023-10-23
+    //link : https://developer.android.com/training/maps/maps-and-places
     private fun createCustomMarker(): BitmapDescriptor {
-        // Adjust the radius as needed
         val circleRadius = 50
 
-        // Create a bitmap with ARGB_8888 configuration
         val bitmap = Bitmap.createBitmap(circleRadius * 2, circleRadius * 2, Bitmap.Config.ARGB_8888)
 
-        // Create a canvas to draw on the bitmap
         val canvas = Canvas(bitmap)
 
-        // Define the paint properties for a blue circle
         val paint = Paint()
-        paint.color = Color.parseColor("#004575") // Use your blue theme color
-        paint.alpha = 150 // Adjust the alpha (transparency) as needed
+        paint.color = Color.parseColor("#004575")
+        paint.alpha = 150
         paint.isAntiAlias = true
         paint.style = Paint.Style.FILL
 
@@ -636,7 +646,8 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
-    private fun removeCurrentRoute() {
+    // clearing the Route
+    private fun removeRoute() {
         currentRoute?.remove()
         currentRoute = null
     }

@@ -39,14 +39,12 @@ class ObservationAdapter(private val observations: List<BirdObservation> , priva
             speciesTextView.text = "Bird Species: ${observation.species}"
             val dateFormatter = SimpleDateFormat("dd EEE MMM yyyy HH:mm", Locale.US)
 
-
             // Parse the dateTime string into a Date
             val date = dateFormatter.parse(observation.dateTime)
 
             // Format the Date object back into a string
             val formattedDate = dateFormatter.format(date)
             dateTimeTextView.text = "Date and Time: $formattedDate"
-
 
             val location = observation.location
             val address = getAddress(location, geocoder)

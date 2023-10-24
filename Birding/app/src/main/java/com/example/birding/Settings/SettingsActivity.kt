@@ -33,11 +33,11 @@ class SettingsActivity : AppCompatActivity() {
         // Initialize UI elements
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
-        radioGroup = findViewById(R.id.radioGroup)
-        distanceTextView = findViewById(R.id.distanceTextView)
-        distanceSeekBar = findViewById(R.id.distanceSeekBar)
-        logoutButton = findViewById(R.id.Logout_btn)
-        profileButton = findViewById(R.id.Profile_btn)
+        radioGroup = findViewById(R.id.rgMeasurementUnits)
+        distanceTextView = findViewById(R.id.tvDistanceValue)
+        distanceSeekBar = findViewById(R.id.sbDistanceSeekBar)
+        logoutButton = findViewById(R.id.btnLogout)
+        profileButton = findViewById(R.id.btnProfile)
 
         auth = FirebaseAuth.getInstance()
 
@@ -65,8 +65,8 @@ class SettingsActivity : AppCompatActivity() {
         // RadioGroup listener for unit selection
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
             val selectedUnit = when (checkedId) {
-                R.id.radioMetric -> "Kilometers"
-                R.id.radioImperial -> "Miles"
+                R.id.rbMetric -> "Kilometers"
+                R.id.rbImperial -> "Miles"
                 else -> "Kilometers" // Default to Kilometers
             }
 

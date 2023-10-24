@@ -3,7 +3,6 @@ package com.example.birding.Settings
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -15,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase
 
 class ProfileActivity : AppCompatActivity() {
 
+    // UI elements
     private lateinit var editProfileName: EditText
     private lateinit var editProfileSurname: EditText
     private lateinit var editProfileEmail: EditText
@@ -25,6 +25,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var backBtn: Button
     private lateinit var progressBar: ProgressBar
 
+    // Firebase and data references
     private val auth = FirebaseAuth.getInstance()
     private val database = FirebaseDatabase.getInstance()
     private val userReference = database.reference.child("Users").child(auth.currentUser?.uid.toString())
@@ -36,18 +37,20 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        editProfileName = findViewById(R.id.editProfileName)
-        editProfileSurname = findViewById(R.id.editProfileSurname)
-        editProfileEmail = findViewById(R.id.editProfileEmail)
-        profileName = findViewById(R.id.profileName)
-        profileSurname = findViewById(R.id.profileSurname)
-        profileEmail = findViewById(R.id.profileEmail)
-        saveProfileBtn = findViewById(R.id.saveProfileBtn)
-        backBtn = findViewById(R.id.backBtn)
+        // Initialize UI elements
+        editProfileName = findViewById(R.id.etProfileName)
+        editProfileSurname = findViewById(R.id.etProfileSurname)
+        editProfileEmail = findViewById(R.id.etProfileEmail)
+        profileName = findViewById(R.id.tvProfileName)
+        profileSurname = findViewById(R.id.tvProfileSurname)
+        profileEmail = findViewById(R.id.tvProfileEmail)
+        saveProfileBtn = findViewById(R.id.btnSaveProfile)
+        backBtn = findViewById(R.id.btnBack)
 
         progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.GONE
 
+        // Initially, text views are visible, and edit fields are invisible
         setTextViewVisibility(true)
         setEditTextVisibility(false)
 

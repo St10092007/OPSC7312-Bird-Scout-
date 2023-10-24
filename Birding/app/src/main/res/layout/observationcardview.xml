@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     app:cardBackgroundColor="@android:color/white"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="20dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
     android:backgroundTint="@color/accent">
 
     <LinearLayout
@@ -17,46 +17,55 @@
 
         <TextView
             android:id="@+id/headingTextView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Observation"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:gravity="center_horizontal"
             android:textColor="@color/secondary" />
 
-        <TextView
-            android:id="@+id/speciesTextView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Bird Species:"
-            android:textSize="18sp"
-            android:textColor="@color/text_color" />
+            android:orientation="vertical"
+            android:layout_marginTop="12dp">
 
-        <TextView
-            android:id="@+id/dateTimeTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Date and Time:"
-            android:textSize="18sp"
-            android:textColor="@color/text_color" />
+            <TextView
+                android:id="@+id/speciesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bird Species: "
+                android:textSize="18sp"
+                android:textColor="@color/text_color" />
 
-        <TextView
-            android:id="@+id/locationTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Location (Latitude, Longitude):"
-            android:textSize="18sp"
-            android:textColor="@color/text_color" />
+            <TextView
+                android:id="@+id/dateTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date and Time: "
+                android:textSize="18sp"
+                android:textColor="@color/text_color"
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/locationTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location : "
+                android:textSize="18sp"
+                android:textColor="@color/text_color"
+                android:layout_marginTop="5dp"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/notesTextView"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Notes:"
+            android:layout_height="wrap_content"
+            android:text="Notes: "
             android:textSize="18sp"
-            android:textColor="@color/text_color"
-            />
+            android:textColor="@color/primary_red"
+            android:layout_marginTop="16dp" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

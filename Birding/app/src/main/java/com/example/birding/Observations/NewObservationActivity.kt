@@ -29,15 +29,15 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 private lateinit var tvTitle: TextView
-private lateinit var speciesName: EditText
-private lateinit var date: TextView
-private lateinit var dateInput: EditText
-private lateinit var locationTv: TextView
-private lateinit var locationET: EditText
-private lateinit var notes: TextView
-private lateinit var birdNotes: EditText
-private lateinit var backBtn: Button
-private lateinit var saveBtn: Button
+private lateinit var etSpeciesName: EditText
+private lateinit var tvDate: TextView
+private lateinit var etDateInput: EditText
+private lateinit var tvLocation: TextView
+private lateinit var etLocation: EditText
+private lateinit var tvNotes: TextView
+private lateinit var etBirdNotes: EditText
+private lateinit var btnBack: Button
+private lateinit var btnSave: Button
 
 private lateinit var database: FirebaseDatabase
 private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -51,15 +51,15 @@ class NewObservationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_new_observation)
 
         tvTitle = findViewById(R.id.tvTitle)
-        speciesName = findViewById(R.id.speciesName)
-        date = findViewById(R.id.date)
-        dateInput = findViewById(R.id.dateInput)
-        locationTv = findViewById(R.id.locationTv)
-        locationET = findViewById(R.id.locationET)
-        notes = findViewById(R.id.notes)
-        birdNotes = findViewById(R.id.bird_notes_)
-        backBtn = findViewById(R.id.backBtn)
-        saveBtn = findViewById(R.id.saveBtn)
+        etSpeciesName = findViewById(R.id.etSpeciesName)
+        tvDate = findViewById(R.id.tvDate)
+        etDateInput = findViewById(R.id.etDateInput)
+        tvLocation = findViewById(R.id.tvLocation)
+        etLocation = findViewById(R.id.etLocation)
+        tvNotes = findViewById(R.id.tvNotes)
+        etBirdNotes = findViewById(R.id.etBirdNotes)
+        btnBack = findViewById(R.id.btnBack)
+        btnSave = findViewById(R.id.btnSave)
 
         database = FirebaseDatabase.getInstance()
         dbReference = database.getReference("Observations")
@@ -67,16 +67,15 @@ class NewObservationActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
 
-        backBtn.setOnClickListener {
+        btnBack.setOnClickListener {
             val intent = Intent(this, ObservationsActivity::class.java)
             startActivity(intent)
         }
-        saveBtn.setOnClickListener {
+        btnSave.setOnClickListener {
             saveObservation()
         }
 
-        locationET.isEnabled = false
-
+        etLocation.isEnabled = false
         fetchLocation { location ->
             if (location != null) {
                 val geocoder = Geocoder(this, Locale.getDefault())
@@ -86,30 +85,42 @@ class NewObservationActivity : AppCompatActivity() {
                         val address = addresses[0]
                         val streetAddress = address.getAddressLine(0)
                         runOnUiThread {
-                            locationET.setText(streetAddress)
+                            etLocation.setText(streetAddress)
                         }
                     } else {
                         runOnUiThread {
-                            locationET.setText("Location not found")
+                            etLocation.setText("Location not found")
                         }
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
                     runOnUiThread {
-                        locationET.setText("Location not found")
+                        etLocation.setText("Location not found")
                     }
                 }
             } else {
                 runOnUiThread {
-                    locationET.setText("Location not found")
+                    etLocation.setText("Location not found")
                 }
             }
         }
     }
 
     private fun saveObservation() {
-        val species = speciesName.text.toString()
-        val notes = birdNotes.text.toString()
+        val species = etSpeciesName.text.toString()
+        val notes = etBirdNotes.text.toString()
+
+        if (species.isEmpty()) {
+            etSpeciesName.error = "Species Name cannot be empty"
+            return
+        }
+
+        // Check if the date is not empty
+        val date = etDateInput.text.toString()
+        if (date.isEmpty()) {
+            etDateInput.error = "Date cannot be empty"
+            return
+        }
 
         fetchLocation { location ->
             val birdLocation = location ?: LatLng(0.0, 0.0)
@@ -160,17 +171,17 @@ class NewObservationActivity : AppCompatActivity() {
                                 val address = addresses[0]
                                 val streetAddress = address.getAddressLine(0)
                                 runOnUiThread {
-                                    locationET.setText(streetAddress)
+                                    etLocation.setText(streetAddress)
                                 }
                             } else {
                                 runOnUiThread {
-                                    locationET.setText("Location not found")
+                                    etLocation.setText("Location not found")
                                 }
                             }
                         } catch (e: IOException) {
                             e.printStackTrace()
                             runOnUiThread {
-                                locationET.setText("Location not found")
+                                etLocation.setText("Location not found")
                             }
                         }
                     }
@@ -231,7 +242,7 @@ class NewObservationActivity : AppCompatActivity() {
                         val selectedDateTime = SimpleDateFormat("dd EEE MMM yyyy HH:mm", Locale.US).format(calendar.time)
 
                         // Set the formatted date and time to the dateInput EditText
-                        dateInput.setText(selectedDateTime)
+                        etDateInput.setText(selectedDateTime)
                     },
                     calendar.get(Calendar.HOUR_OF_DAY),
                     calendar.get(Calendar.MINUTE),

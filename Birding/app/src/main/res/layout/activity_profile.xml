@@ -9,7 +9,7 @@
     android:background="@color/primary_grey">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/ivLogoBackground"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:src="@drawable/logobackground"
@@ -29,20 +29,20 @@
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintTop_toBottomOf="@id/ivLogoBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Main Container -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/cvMainContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
         android:backgroundTint="@color/accent"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintTop_toBottomOf="@id/ivLogoBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -62,7 +62,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/profileName"
+                android:id="@+id/tvProfileName"
                 android:layout_marginTop="16dp"
                 android:textSize="20dp"
                 android:textColor="@color/text_color"
@@ -71,7 +71,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/profileSurname"
+                android:id="@+id/tvProfileSurname"
                 android:layout_marginTop="16dp"
                 android:textSize="20dp"
                 android:textColor="@color/text_color"
@@ -80,7 +80,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/profileEmail"
+                android:id="@+id/tvProfileEmail"
                 android:layout_marginTop="16dp"
                 android:textSize="20dp"
                 android:textColor="@color/text_color"
@@ -90,7 +90,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:id="@+id/editProfileName"
+                android:id="@+id/etProfileName"
                 android:textColorHint="@color/text_color"
                 android:textColor="@color/text_color"
                 android:hint="Name"
@@ -98,7 +98,7 @@
                 android:layout_marginTop="16dp" />
 
             <EditText
-                android:id="@+id/editProfileSurname"
+                android:id="@+id/etProfileSurname"
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:layout_marginTop="16dp"
@@ -109,7 +109,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:id="@+id/editProfileEmail"
+                android:id="@+id/etProfileEmail"
                 android:textColorHint="@color/text_color"
                 android:textColor="@color/text_color"
                 android:hint="Email"
@@ -125,11 +125,20 @@
         android:layout_marginTop="16dp"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/cardView"
+        app:layout_constraintTop_toBottomOf="@id/cvMainContainer"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
-            android:id="@+id/saveProfileBtn"
+            android:id="@+id/btnBack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_marginEnd="16dp"
+            android:text="Back"
+            android:backgroundTint="@color/primary_red"
+            android:textColor="@color/text_color" />
+        <Button
+            android:id="@+id/btnSaveProfile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_columnWeight="1"
@@ -138,14 +147,6 @@
             android:backgroundTint="@color/primary_blue"
             android:textColor="@color/text_color" />
 
-        <Button
-            android:id="@+id/backBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_marginEnd="16dp"
-            android:text="Back"
-            android:backgroundTint="@color/secondary"
-            android:textColor="@color/text_color" />
+
     </GridLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
