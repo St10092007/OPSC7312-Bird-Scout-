@@ -11,18 +11,21 @@ import com.example.birding.R
 import com.example.birding.Settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-lateinit var bottomNavigationView: BottomNavigationView
-private lateinit var exploreButton : Button
-private lateinit var myObservationsButton : Button
-
 class HomeActivity : AppCompatActivity() {
+
+    lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var exploreButton : Button
+    private lateinit var ObservationsButton : Button
+    private lateinit var settingsButton : Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         // Initialize UI elements
-        exploreButton = findViewById(R.id.btnExplore)
-        myObservationsButton = findViewById(R.id.btnMyObservations)
+        exploreButton = findViewById(R.id.btnExploreHotspots)
+        ObservationsButton = findViewById(R.id.btnObservations)
+        settingsButton = findViewById(R.id.btnSettings)
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
 
 
@@ -31,10 +34,13 @@ class HomeActivity : AppCompatActivity() {
             startActivity(Intent(this, HotspotsActivity::class.java))
         }
 
-        myObservationsButton.setOnClickListener {
+        ObservationsButton.setOnClickListener {
             startActivity(Intent(this, ObservationsActivity::class.java))
         }
 
+        settingsButton.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
         setupBottomNavigation()
     }
 

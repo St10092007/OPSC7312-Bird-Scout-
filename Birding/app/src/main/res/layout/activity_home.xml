@@ -1,84 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Home.HomeActivity"
-    android:background="@color/primary_grey">
+    android:background="@color/primary_grey"
+    tools:context=".Home.HomeActivity">
 
-    <!-- Header Section -->
-    <LinearLayout
-        android:id="@+id/headerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
+    <!-- Birding App Logo -->
+    <ImageView
+        android:id="@+id/ivAppLogo"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/logobackground"
+        android:layout_marginTop="64dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="64dp">
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewCoreMessage" />
 
-        <ImageView
-            android:id="@+id/ivAppLogo"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:src="@drawable/logobackground"
-             />
-
-        <TextView
-            android:id="@+id/tvWelcomeText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Welcome to the Bird Scout Application! Get started."
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginTop="50dp"
-            android:background="@color/accent"/>
-    </LinearLayout>
-
-    <!-- Call-to-Action Buttons -->
-    <GridLayout
-        android:id="@+id/glActionButtonsLayout"
-        android:layout_width="match_parent"
+    <!-- Core Message Text -->
+    <TextView
+        android:id="@+id/textViewCoreMessage"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:rowCount="1"
-        android:columnCount="2"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="100dp"
+        android:text="Explore the World of Birds"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/ivAppLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/headerLayout"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView">
+        android:layout_marginTop="16dp" />
 
-        <Button
-            android:id="@+id/btnExplore"
-            android:text="Explore Hotspots"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:onClick="exploreHotspotsClick"/>
-
-        <Button
-            android:id="@+id/btnMyObservations"
-            android:text="My Observations"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:layout_marginStart="16dp"
-            android:onClick="myObservationsClick"/>
-    </GridLayout>
-
-
-    <!-- Bottom Navigation -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        style="@style/CustomBottomNavigation"
-        android:layout_width="match_parent"
+    <!-- Call-to-Action Buttons -->
+    <LinearLayout
+        android:id="@+id/ctaButtonLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:menu="@menu/bottom_navigation_menu"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCoreMessage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        android:layout_marginTop="32dp"
+        >
+
+        <Button
+            android:id="@+id/btnObservations"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_weight="1"
+            android:text="Observations"
+            android:textColor="@color/white"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/button_with_border_observations"
+            android:padding="8dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="8dp"
+            />
+
+        <Button
+            android:id="@+id/btnExploreHotspots"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_weight="1"
+            android:text="Explore Hotspots"
+            android:textColor="@color/white"
+            android:background="@drawable/button_with_border_explore"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="-10dp"
+            />
+
+        <Button
+            android:id="@+id/btnSettings"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_weight="1"
+            android:text="Settings"
+            android:textColor="@color/white"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/button_with_border_settings"
+            android:padding="8dp"
+            android:layout_marginBottom="10dp"/>
+    </LinearLayout>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            style="@style/CustomBottomNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:menu="@menu/bottom_navigation_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    tools:context=".Home.HomeActivity"-->
+<!--    android:background="@color/primary_grey">-->
+
+<!--    &lt;!&ndash; Header Section &ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/headerLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:orientation="vertical"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginTop="64dp">-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/ivAppLogo"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="100dp"-->
+<!--            android:src="@drawable/logobackground"-->
+<!--             />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tvWelcomeText"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Welcome to the Bird Scout Application! Get started."-->
+<!--            android:textSize="24sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_marginTop="50dp"-->
+<!--            android:background="@color/accent"/>-->
+<!--    </LinearLayout>-->
+
+<!--    &lt;!&ndash; Call-to-Action Buttons &ndash;&gt;-->
+<!--    <GridLayout-->
+<!--        android:id="@+id/glActionButtonsLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:rowCount="1"-->
+<!--        android:columnCount="2"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:layout_marginBottom="100dp"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/headerLayout"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnExplore"-->
+<!--            android:text="Explore Hotspots"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_columnWeight="1"-->
+<!--            android:onClick="exploreHotspotsClick"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/btnMyObservations"-->
+<!--            android:text="My Observations"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_columnWeight="1"-->
+<!--            android:layout_marginStart="16dp"-->
+<!--            android:onClick="myObservationsClick"/>-->
+<!--    </GridLayout>-->
+
+
+<!--    &lt;!&ndash; Bottom Navigation &ndash;&gt;-->
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottomNavigationView"-->
+<!--        style="@style/CustomBottomNavigation"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom"-->
+<!--        app:menu="@menu/bottom_navigation_menu"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

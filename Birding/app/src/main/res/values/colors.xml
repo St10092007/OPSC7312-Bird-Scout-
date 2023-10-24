@@ -15,6 +15,7 @@
     <color name="accent">#283132</color>
 
 
+    <color name="transparent">#00000000</color>
     <color name="primary_green">#4CAF50</color>
     <color name="primary_red">#F44336</color>
     <color name="primary_grey">#C0C0C0</color>

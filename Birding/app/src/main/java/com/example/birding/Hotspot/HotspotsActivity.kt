@@ -62,9 +62,9 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var location: Location? = null
     private val locationPermissionCode = 100
     private lateinit var hotspotDetailsFrameLayout: FrameLayout
-    private lateinit var selectedHotspot: TextView
-    private lateinit var hotspotDirectionBtn: Button
-    private lateinit var distanceToHotspot: TextView
+    private lateinit var tvSelectedHotspot: TextView
+    private lateinit var btnHotspotDirection: Button
+    private lateinit var tvDistanceToHotspot: TextView
     private var currentRoute: Polyline? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
@@ -76,10 +76,10 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotspots)
         mapView = findViewById(R.id.mapView)
-        selectedHotspot = findViewById(R.id.tvSelectedHotspot)
-        hotspotDirectionBtn = findViewById(R.id.btnHotspotDirection)
+        tvSelectedHotspot = findViewById(R.id.tvSelectedHotspot)
+        btnHotspotDirection = findViewById(R.id.btnHotspotDirection)
         hotspotDetailsFrameLayout = findViewById(R.id.hotspotDetailsFrameLayout)
-        distanceToHotspot = findViewById(R.id.tvDistanceToHotspot)
+        tvDistanceToHotspot = findViewById(R.id.tvDistanceToHotspot)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -214,7 +214,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         removeRoute()
 
         // Hide the distance text
-        distanceToHotspot.visibility = View.GONE
+        tvDistanceToHotspot.visibility = View.GONE
 
         // Select the clicked marker (show hotspot details)
         selectedMarker?.setIcon(customMarkerBird(this,100))
@@ -224,11 +224,11 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Update the hotspot name in the TextView
         val hotspotName = marker.title
-        selectedHotspot.text = hotspotName
+        tvSelectedHotspot.text = hotspotName
 
         hotspotDetailsFrameLayout.visibility = View.VISIBLE
-        selectedHotspot.visibility = View.VISIBLE
-        hotspotDirectionBtn.visibility = View.VISIBLE
+        tvSelectedHotspot.visibility = View.VISIBLE
+        btnHotspotDirection.visibility = View.VISIBLE
 
         val unitPreference = sharedPreferences.getBoolean("isMetric", true)
 
@@ -251,8 +251,8 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                 String.format("%.2f mi", miles)
             }
 
-            distanceToHotspot.text = "Distance: $formattedDistance"
-            distanceToHotspot.visibility = View.VISIBLE
+            tvDistanceToHotspot.text = "Distance: $formattedDistance"
+            tvDistanceToHotspot.visibility = View.VISIBLE
             val builder = LatLngBounds.builder()
             builder.include(origin)
             builder.include(marker.position)
@@ -263,11 +263,11 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             val cameraUpdate = CameraUpdateFactory.newLatLngBounds(bounds, padding)
             googleMap.animateCamera(cameraUpdate)
         } else {
-            distanceToHotspot.visibility = View.GONE
+            tvDistanceToHotspot.visibility = View.GONE
         }
 
 
-        hotspotDirectionBtn.setOnClickListener {
+        btnHotspotDirection.setOnClickListener {
             if (isNavigating) {
                 // User is navigating; stop the navigation
                 isNavigating = false
@@ -277,7 +277,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             } else {
                 // User is not navigating; start navigation
                 isNavigating = true
-                hotspotDirectionBtn.apply {
+                btnHotspotDirection.apply {
                     text = "Stop"
                     setBackgroundColor(Color.RED)
                 }
@@ -291,7 +291,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun resetDirectionButton() {
-        hotspotDirectionBtn.apply {
+        btnHotspotDirection.apply {
             text = "Get Directions"
             setBackgroundColor(ContextCompat.getColor(this@HotspotsActivity, R.color.primary_blue))
         }

@@ -44,7 +44,7 @@ class ProfileActivity : AppCompatActivity() {
         profileName = findViewById(R.id.tvProfileName)
         profileSurname = findViewById(R.id.tvProfileSurname)
         profileEmail = findViewById(R.id.tvProfileEmail)
-        saveProfileBtn = findViewById(R.id.btnSaveProfile)
+        saveProfileBtn = findViewById(R.id.btnBack)
         backBtn = findViewById(R.id.btnBack)
 
         progressBar = findViewById(R.id.progressBar)
@@ -111,9 +111,9 @@ class ProfileActivity : AppCompatActivity() {
                 val user = dataSnapshot.getValue(User::class.java)
                 user?.let {
                     // Populate the textviews Text fields with user data
-                    profileName.text = "Name: ${it.name}"
-                    profileSurname.text = "Surname: ${it.surname}"
-                    profileEmail.text = "Email: ${it.email}"
+                    profileName.text = "Profile Name: ${it.name}"
+                    profileSurname.text = "Profile Surname: ${it.surname}"
+                    profileEmail.text = "Profile Email: ${it.email}"
 
                     progressBar.visibility = View.GONE
 

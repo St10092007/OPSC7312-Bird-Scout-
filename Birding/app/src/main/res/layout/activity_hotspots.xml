@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Hotspot.HotspotsActivity"
-    android:background="#D9D9D9">
+    android:background="@color/primary_grey">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -18,11 +18,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <ImageView
+        android:id="@+id/ivLogoBackground"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/logobackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/mapView"/>
+
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivLogoBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/hotspotDetailsFrameLayout" />
@@ -30,7 +41,7 @@
     <FrameLayout
         android:id="@+id/hotspotDetailsFrameLayout"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
         android:layout_marginEnd="18dp"
         android:visibility="gone"
@@ -42,54 +53,49 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center_vertical">
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            >
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center_vertical">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tvSelectedHotspot"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="start"
                     android:text=""
                     android:textSize="20sp"
                     android:visibility="gone"
-                    android:layout_weight="1"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/black"/>
+                    android:textColor="@color/accent" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="0" />
-
-                <Button
-                    android:id="@+id/btnHotspotDirection"
-                    android:background="@color/primary_blue"
-                    android:text="Get Directions"
-                    android:layout_width="wrap_content"
-                    android:layout_height="54dp"
+                <TextView
+                    android:id="@+id/tvDistanceToHotspot"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:text="Distance"
+                    android:textSize="20sp"
                     android:visibility="gone"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="18dp" />
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/accent" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvDistanceToHotspot"
-                android:layout_width="match_parent"
-                android:layout_height="50.6dp"
-                android:gravity="start"
-                android:text="Distance"
-                android:textSize="20sp"
+            <Button
+                android:id="@+id/btnHotspotDirection"
+                android:backgroundTint="@color/secondary"
+                android:text="Get Directions"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
                 android:visibility="gone"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="50dp"
-                android:textColor="@color/black"/>
+                android:layout_gravity="end"
+                />
         </LinearLayout>
     </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
