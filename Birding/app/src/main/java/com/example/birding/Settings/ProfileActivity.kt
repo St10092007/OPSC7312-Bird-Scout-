@@ -44,7 +44,7 @@ class ProfileActivity : AppCompatActivity() {
         profileName = findViewById(R.id.tvProfileName)
         profileSurname = findViewById(R.id.tvProfileSurname)
         profileEmail = findViewById(R.id.tvProfileEmail)
-        saveProfileBtn = findViewById(R.id.btnBack)
+        saveProfileBtn = findViewById(R.id.btnSave)
         backBtn = findViewById(R.id.btnBack)
 
         progressBar = findViewById(R.id.progressBar)
@@ -117,9 +117,9 @@ class ProfileActivity : AppCompatActivity() {
 
                     progressBar.visibility = View.GONE
 
-                    editProfileName.setText(user.name)
-                    editProfileSurname.setText(user.surname)
-                    editProfileEmail.setText(user.email)
+                    editProfileName.setText("${it.name}")
+                    editProfileSurname.setText("${it.surname}")
+                    editProfileEmail.setText("${it.email}")
                 }
             }
         }
