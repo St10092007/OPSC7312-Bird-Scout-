@@ -8,6 +8,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import com.example.birding.Core.User
 import com.example.birding.R
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
@@ -17,7 +18,8 @@ class ProfileActivity : AppCompatActivity() {
     // UI elements
     private lateinit var editProfileName: EditText
     private lateinit var editProfileSurname: EditText
-    private lateinit var editProfileEmail: EditText
+    private lateinit var editOldPassword: EditText
+    private lateinit var editNewPassword: EditText
     private lateinit var profileEmail: TextView
     private lateinit var profileName: TextView
     private lateinit var profileSurname: TextView
@@ -40,18 +42,17 @@ class ProfileActivity : AppCompatActivity() {
         // Initialize UI elements
         editProfileName = findViewById(R.id.etProfileName)
         editProfileSurname = findViewById(R.id.etProfileSurname)
-        editProfileEmail = findViewById(R.id.etProfileEmail)
         profileName = findViewById(R.id.tvProfileName)
         profileSurname = findViewById(R.id.tvProfileSurname)
-        profileEmail = findViewById(R.id.tvProfileEmail)
+        editOldPassword = findViewById(R.id.etOldPassword)
+        editNewPassword = findViewById(R.id.etNewPassword)
         saveProfileBtn = findViewById(R.id.btnSave)
         backBtn = findViewById(R.id.btnBack)
 
         progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.GONE
 
-        // Initially, text views are visible, and edit fields are invisible
-        setTextViewVisibility(true)
+        // Initially, edit fields are invisible
         setEditTextVisibility(false)
 
         // Fetch and display user data
@@ -62,13 +63,19 @@ class ProfileActivity : AppCompatActivity() {
 
         saveProfileBtn.setOnClickListener {
             if (isEditing) {
+                val oldPassword = editOldPassword.text.toString()
+                val newPassword = editNewPassword.text.toString()
 
-                updateUserProfile()
+                if (oldPassword.isEmpty() || newPassword.isEmpty()) {
+                    Toast.makeText(this, "Please fill in both old and new passwords", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Call a function to update the password
+                    updatePassword(oldPassword, newPassword)
+                }
                 isChangesSaved = true
-                setTextViewVisibility(true)
+                fetchUserData()
                 setEditTextVisibility(false)
             } else {
-                setTextViewVisibility(false)
                 setEditTextVisibility(true)
                 saveProfileBtn.text = "Save"
             }
@@ -88,18 +95,40 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    private fun setTextViewVisibility(visible: Boolean) {
-        val visibility = if (visible) View.VISIBLE else View.INVISIBLE
-        profileName.visibility = visibility
-        profileSurname.visibility = visibility
-        profileEmail.visibility = visibility
+    private fun updatePassword(oldPassword: String, newPassword: String) {
+        val user = auth.currentUser
+        val email = user?.email
+
+        if (email != null) {
+            val credential = EmailAuthProvider.getCredential(email, oldPassword)
+
+            user?.reauthenticate(credential)?.addOnCompleteListener { reauthTask ->
+                if (reauthTask.isSuccessful) {
+                    user.updatePassword(newPassword).addOnCompleteListener { updateTask ->
+                        if (updateTask.isSuccessful) {
+                            Toast.makeText(this, "Password updated successfully", Toast.LENGTH_SHORT).show()
+                            // Clear the password fields
+                            editOldPassword.text.clear()
+                            editNewPassword.text.clear()
+                            // ...
+                        } else {
+                            Toast.makeText(this, "Password update failed: ${updateTask.exception?.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(this, "Authentication failed: ${reauthTask.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun setEditTextVisibility(visible: Boolean) {
         val visibility = if (visible) View.VISIBLE else View.INVISIBLE
         editProfileName.visibility = visibility
         editProfileSurname.visibility = visibility
-        editProfileEmail.visibility = visibility
+        editOldPassword.visibility = visibility
+        editNewPassword.visibility = visibility
+
     }
 
     private fun fetchUserData() {
@@ -113,37 +142,14 @@ class ProfileActivity : AppCompatActivity() {
                     // Populate the textviews Text fields with user data
                     profileName.text = "Profile Name: ${it.name}"
                     profileSurname.text = "Profile Surname: ${it.surname}"
-                    profileEmail.text = "Profile Email: ${it.email}"
 
                     progressBar.visibility = View.GONE
 
-                    editProfileName.setText("${it.name}")
-                    editProfileSurname.setText("${it.surname}")
-                    editProfileEmail.setText("${it.email}")
+                    editProfileName.setText(it.name)
+                    editProfileSurname.setText(it.surname)
                 }
             }
         }
-    }
-
-    private fun updateUserProfile() {
-        val name = editProfileName.text.toString()
-        val surname = editProfileSurname.text.toString()
-        val email = editProfileEmail.text.toString()
-        val password = ""
-
-        // Update user information in Realtime Database
-        val updatedUser = User(name, surname, email, password)
-        userReference.setValue(updatedUser)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, "Profile update failed: ${exception.message}", Toast.LENGTH_SHORT).show()
-            }
-
-        saveProfileBtn.text = "Edit"
-
-        isEditing = !isEditing
     }
 
     private fun showConfirmationDialog() {
@@ -153,9 +159,11 @@ class ProfileActivity : AppCompatActivity() {
             .setMessage("You have unsaved changes. Are you sure you want to leave edit mode without saving?")
             .setPositiveButton("Yes") { _, _ ->
 
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-                finish()
+                setEditTextVisibility(false)
+                saveProfileBtn.text = "Edit"
+                isEditing = false
+                isChangesSaved = false
+                fetchUserData()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
 

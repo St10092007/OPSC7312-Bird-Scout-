@@ -21,6 +21,7 @@
 
     <!-- Title -->
     <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Profile"
@@ -28,9 +29,11 @@
         android:textColor="@color/secondary"
         android:textSize="28sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/ivLogoBackground"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@id/cvMainContainer"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/ivLogoBackground" />
 
     <!-- Main Container -->
     <androidx.cardview.widget.CardView
@@ -40,7 +43,7 @@
         android:layout_margin="16dp"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/ivLogoBackground"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -80,22 +83,12 @@
                 android:textColor="@color/text_color"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvProfileEmail"
-                android:layout_marginTop="16dp"
-                android:textSize="20dp"
-                android:text="Profile Email : "
-                android:textColor="@color/text_color"
-                />
 
             <!-- Profile Information -->
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:id="@+id/etProfileName"
-                android:textColorHint="@color/text_color"
                 android:textColor="@color/text_color"
                 android:hint="Name"
                 android:textSize="18sp"
@@ -106,20 +99,30 @@
             <EditText
                 android:id="@+id/etProfileSurname"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:textColorHint="@color/text_color"
                 android:textColor="@color/text_color"
                 android:hint="Surname" />
 
             <EditText
+                android:id="@+id/etOldPassword"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/etProfileEmail"
-                android:textColorHint="@color/text_color"
+                android:layout_height="wrap_content"
+                android:hint="Old Password"
+                android:inputType="textPassword"
+                android:layout_marginTop="12dp"
                 android:textColor="@color/text_color"
-                android:hint="Email"
-                android:layout_marginTop="12dp" />
+                />
+
+            <EditText
+                android:id="@+id/etNewPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="New Password"
+                android:inputType="textPassword"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/text_color"
+                />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
