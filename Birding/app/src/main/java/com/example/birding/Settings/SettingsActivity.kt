@@ -41,9 +41,6 @@ class SettingsActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        // Set the default unit and distance
-//        setUnit("Kilometers")
-
         val savedDistance = sharedPreferences.getInt("selectedDistance", 0)
         distanceSeekBar.progress = savedDistance
         distanceTextView.text = "$savedDistance ${getSelectedUnit()}"
