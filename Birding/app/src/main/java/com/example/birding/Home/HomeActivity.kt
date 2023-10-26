@@ -15,32 +15,32 @@ class HomeActivity : AppCompatActivity() {
 
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var exploreButton : Button
-    private lateinit var ObservationsButton : Button
+    private lateinit var observationsButton : Button
     private lateinit var settingsButton : Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         // Initialize UI elements
         exploreButton = findViewById(R.id.btnExploreHotspots)
-        ObservationsButton = findViewById(R.id.btnObservations)
+        observationsButton = findViewById(R.id.btnObservations)
         settingsButton = findViewById(R.id.btnSettings)
-
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
-
 
         // Set click listeners for buttons
         exploreButton.setOnClickListener {
             startActivity(Intent(this, HotspotsActivity::class.java))
         }
 
-        ObservationsButton.setOnClickListener {
+        observationsButton.setOnClickListener {
             startActivity(Intent(this, ObservationsActivity::class.java))
         }
 
         settingsButton.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+
         setupBottomNavigation()
     }
 
@@ -62,6 +62,7 @@ class HomeActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_home -> {
+                    // Home is already selected, do nothing.
                     true
                 }
                 R.id.menu_hotspots -> {
@@ -80,5 +81,4 @@ class HomeActivity : AppCompatActivity() {
             }
         }
     }
-
 }

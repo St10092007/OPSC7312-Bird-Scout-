@@ -1,3 +1,4 @@
+// Import statements for required libraries and components
 package com.example.birding.Hotspot
 
 import android.Manifest
@@ -53,6 +54,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 
+// Class definition for HotspotsActivity
 class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     // UI and Location-related Components
@@ -72,6 +74,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var sharedPreferences: SharedPreferences
     private var isNavigating = false
 
+    // onCreate method called when the activity is created
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hotspots)
@@ -83,9 +86,10 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
+        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+
 
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE)
-
 
         // Check for location permissions and request them if necessary
         if (!hasLocationPermission()) {
@@ -95,7 +99,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             fetchLastLocation { location ->
                 location?.let {
                     fetchEBirdHotspots(LatLng(location.latitude, location.longitude))
-
                 }
             }
         }
@@ -110,8 +113,10 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-        // navigation
-        bottomNavigationView = findViewById(R.id.bottomNavigationView)
+        setupBottomNavigation()
+        }
+
+    private fun setupBottomNavigation() {
         bottomNavigationView.selectedItemId = R.id.menu_hotspots
 
         val observationMenuItem = bottomNavigationView.menu.findItem(R.id.menu_observations)
@@ -119,28 +124,29 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         val homeMenuItem = bottomNavigationView.menu.findItem(R.id.menu_home)
         val settingsMenuItem = bottomNavigationView.menu.findItem(R.id.menu_settings)
 
+        // Set tooltips for navigation items
         observationMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Observations") }
         hotspotsMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Hotspots") }
         homeMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Home") }
         settingsMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Settings") }
 
+        // Bottom navigation item click listener
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_home -> {
-                    startActivity(Intent(this, HomeActivity::class.java))
+                    // Home is already selected, do nothing.
                     true
                 }
                 R.id.menu_hotspots -> {
+                    startActivity(Intent(this, HotspotsActivity::class.java))
                     true
                 }
                 R.id.menu_observations -> {
-                    // Handle observations menu item
                     startActivity(Intent(this, ObservationsActivity::class.java))
                     true
                 }
                 R.id.menu_settings -> {
-                    // Handle settings menu item
-                     startActivity(Intent(this, SettingsActivity::class.java))
+                    startActivity(Intent(this, SettingsActivity::class.java))
                     true
                 }
                 else -> false
@@ -152,6 +158,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun requestLocationPermission() {
         ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), locationPermissionCode)
     }
+
     private fun hasLocationPermission(): Boolean {
         val fineLocationPermission = ActivityCompat.checkSelfPermission(
             this,
@@ -230,7 +237,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         tvSelectedHotspot.visibility = View.VISIBLE
         btnHotspotDirection.visibility = View.VISIBLE
 
-        val unitPreference = sharedPreferences.getBoolean("isMetric", true)
+        val unitPreference = sharedPreferences.getString(IS_METRIC_PREFERENCE_KEY, "Kilometers")
 
         // Calculate and display the distance
         val origin = location?.let { LatLng(it.latitude, it.longitude) }
@@ -238,17 +245,25 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             val distance = calculateDistance(origin, marker.position)
 
             // Update the distance based on user preferences
-            val formattedDistance = if (unitPreference) {
+            val formattedDistance = if (unitPreference == "Kilometers") {
                 if (distance > 1000) {
                     val distanceInKm = distance / 1000.0
                     String.format("%.2f km", distanceInKm)
                 } else {
                     String.format("%.2f meters", distance)
                 }
-            } else {
+            } else if (unitPreference == "Miles") {
                 // Convert meters to miles
                 val miles = distance * 0.000621371
                 String.format("%.2f mi", miles)
+            } else {
+                // Default to Kilometers
+                if (distance > 1000) {
+                    val distanceInKm = distance / 1000.0
+                    String.format("%.2f km", distanceInKm)
+                } else {
+                    String.format("%.2f meters", distance)
+                }
             }
 
             tvDistanceToHotspot.text = "Distance: $formattedDistance"
@@ -266,7 +281,6 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             tvDistanceToHotspot.visibility = View.GONE
         }
 
-
         btnHotspotDirection.setOnClickListener {
             if (isNavigating) {
                 // User is navigating; stop the navigation
@@ -279,7 +293,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                 isNavigating = true
                 btnHotspotDirection.apply {
                     text = "Stop"
-                    setBackgroundColor(Color.RED)
+                    setBackgroundColor(ContextCompat.getColor(this@HotspotsActivity, R.color.primary_red))
                 }
                 startLocationUpdates()
                 // Calculate and display the route to the selected hotspot
@@ -296,6 +310,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             setBackgroundColor(ContextCompat.getColor(this@HotspotsActivity, R.color.primary_blue))
         }
     }
+
     private fun calculateDistance(origin: LatLng, destination: LatLng): Float {
         val results = FloatArray(1)
         Location.distanceBetween(
@@ -305,6 +320,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         )
         return results[0]
     }
+
     private fun centerMapOnUserLocation() {
         if (hasLocationPermission()) {
             fetchLastLocation { location ->
@@ -341,13 +357,12 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
     }
-    private fun fetchEBirdHotspots(location: LatLng) {
 
+    private fun fetchEBirdHotspots(location: LatLng) {
         val apiKey = "h5qidkb3h7cv"
         // Retrieve user preferences from SharedPreferences
         val selectedUnit = sharedPreferences.getString(IS_METRIC_PREFERENCE_KEY, "Kilometers") ?: "Kilometers"
         val selectedDistance = sharedPreferences.getInt(MAX_DISTANCE_PREFERENCE_KEY, 50)
-
         // Convert maxDistance to kilometers if the user prefers miles
         val convertedDistance = if (selectedUnit == "Kilometers") {
             selectedDistance // No need to convert, as it's already in kilometers
@@ -358,14 +373,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.e("MyApp", "converted distance : $convertedDistance")
 
         // EBIRD API 2.0
-        // link : https://documenter.getpostman.com/view/664302/S1ENwy59#c9947c5c-2dce-4c6d-9911-7d702235506c
-        // Build URL
         val eBirdAPIUrl ="https://api.ebird.org/v2/ref/hotspot/geo?lat=${location.latitude}&lng=${location.longitude}&dist=${convertedDistance}&fmt=json"
-
-
-        //The following code was taken and modified from the OPEN SOURCE CODING (INTERMEDIATE) MODULE MANUAL 2023
-        //Author : The Independent Institute of Education (The IIE)
-        //Unpublished
 
         // Create URL object
         var url: URL? = null
@@ -382,18 +390,15 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     // Get the response code
                     val responseCode = connection.responseCode
-                    Log.d("MyApp", "Response Code: $responseCode")
                     // Check if the request was successful (HTTP status code 200)
                     if (responseCode == HttpURLConnection.HTTP_OK) {
                         // Fetch data from the connection
                         val inputStream = connection.inputStream
                         val urlData = inputStream.bufferedReader().use { it.readText() }
-                        Log.d("MyApp", "Response Data: $urlData")
 
                         // Parse JSON data
                         try {
                             val responseString = urlData.trim() // Trim any leading/trailing whitespace
-                            Log.d("ResponseString", responseString)
 
                             if (responseString.startsWith("[")) {
                                 // Valid JSON array response
@@ -410,10 +415,10 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                                     runOnUiThread {
                                         googleMap.addMarker(
                                             MarkerOptions()
-                                            .position(hotspotLocation)
-                                            .title(name)
-                                            .icon(customMarkerBird(this,100))
-                                            .zIndex(1.0f))
+                                                .position(hotspotLocation)
+                                                .title(name)
+                                                .icon(customMarkerBird(this,100))
+                                                .zIndex(1.0f))
                                     }
                                 }
                             } else {
@@ -515,7 +520,9 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
     }
-
+    private fun removeRoute() {
+        currentRoute?.remove()
+    }
 
     private fun startLocationUpdates() {
         val locationRequest = LocationRequest()
@@ -601,6 +608,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         return decoded
     }
+
     private fun customMarkerBird(context: Context, targetSize: Int): BitmapDescriptor {
         // Load the dove icon from your drawables
         val doveIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.dove)
@@ -623,32 +631,14 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         val circleRadius = 50
 
         val bitmap = Bitmap.createBitmap(circleRadius * 2, circleRadius * 2, Bitmap.Config.ARGB_8888)
-
         val canvas = Canvas(bitmap)
-
         val paint = Paint()
-        paint.color = Color.parseColor("#004575")
-        paint.alpha = 150
+        paint.color = Color.RED
         paint.isAntiAlias = true
-        paint.style = Paint.Style.FILL
-
-        // Draw a blue circle on the canvas
         canvas.drawCircle(circleRadius.toFloat(), circleRadius.toFloat(), circleRadius.toFloat(), paint)
 
-        val icon = BitmapFactory.decodeResource(resources, R.drawable.dove)
-        val iconSize = circleRadius * 2
-        val iconLeft = circleRadius - iconSize / 2
-        val iconTop = circleRadius - iconSize / 2
-        val iconRect = Rect(iconLeft, iconTop, iconLeft + iconSize, iconTop + iconSize)
-        canvas.drawBitmap(icon, null, iconRect, null)
-
-        // Create a BitmapDescriptor from the custom marker image
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
-    // clearing the Route
-    private fun removeRoute() {
-        currentRoute?.remove()
-        currentRoute = null
-    }
+
 }

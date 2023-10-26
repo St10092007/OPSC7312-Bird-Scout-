@@ -42,7 +42,7 @@ class SettingsActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         // Set the default unit and distance
-        setUnit("Kilometers")
+//        setUnit("Kilometers")
 
         val savedDistance = sharedPreferences.getInt("selectedDistance", 0)
         distanceSeekBar.progress = savedDistance
@@ -61,6 +61,15 @@ class SettingsActivity : AppCompatActivity() {
                 sharedPreferences.edit().putInt("selectedDistance", seekBar?.progress ?: 0).apply()
             }
         })
+
+        // Set the default unit and distance
+        val savedUnit = getSelectedUnit()
+        val radioButtonId = when (savedUnit) {
+            "Kilometers" -> R.id.rbMetric
+            "Miles" -> R.id.rbImperial
+            else -> R.id.rbMetric // Default to Metric
+        }
+        radioGroup.check(radioButtonId)
 
         // RadioGroup listener for unit selection
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
@@ -174,7 +183,6 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
     }
-
     companion object {
         const val PREFERENCES_NAME = "userPreferences"
         const val IS_METRIC_PREFERENCE_KEY = "selectedUnit"

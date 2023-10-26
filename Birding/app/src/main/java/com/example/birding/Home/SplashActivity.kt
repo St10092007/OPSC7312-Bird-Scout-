@@ -11,8 +11,11 @@ import com.example.birding.Authentication.RegisterActivity
 import com.example.birding.R
 
 
-val SPLASH_DELAY: Long = 2000
+val SPLASH_DELAY: Long = 1000
 
+//The following code was taken and modified from android developers.
+//Author : android developers
+//Link: https://developer.android.com/develop/ui/views/launch/splash-screen
 class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

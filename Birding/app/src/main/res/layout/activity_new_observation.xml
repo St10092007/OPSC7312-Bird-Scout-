@@ -88,13 +88,15 @@
                 android:id="@+id/etDateInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Select Date and Time"
                 android:textColorHint="@color/primary_grey"
                 android:textColor="@color/text_color"
                 android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
                 android:focusable="false"
-                android:clickable="true"
-                android:layout_marginStart="16dp"/>
+                android:inputType="none"
+                android:clickable="false"
+                />
+
 
             <!-- Location Label -->
             <TextView
@@ -140,7 +142,9 @@
                 android:textColorHint="@color/primary_grey"
                 android:textColor="@color/text_color"
                 android:layout_marginTop="8dp"
-                android:layout_marginStart="16dp"/>
+                android:layout_marginStart="16dp"
+                android:hint="Enter notes"
+                />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

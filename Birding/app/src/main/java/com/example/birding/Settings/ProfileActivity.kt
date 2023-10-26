@@ -20,7 +20,6 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var editProfileSurname: EditText
     private lateinit var editOldPassword: EditText
     private lateinit var editNewPassword: EditText
-    private lateinit var profileEmail: TextView
     private lateinit var profileName: TextView
     private lateinit var profileSurname: TextView
     private lateinit var saveProfileBtn: Button
@@ -33,7 +32,6 @@ class ProfileActivity : AppCompatActivity() {
     private val userReference = database.reference.child("Users").child(auth.currentUser?.uid.toString())
     private var isEditing = false
     private var isChangesSaved = false
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

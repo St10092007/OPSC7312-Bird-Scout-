@@ -11,7 +11,9 @@ import com.google.android.gms.maps.model.LatLng
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+//Some Portions of this code are modifications based on work created and shared by geeksforgeeks
+//Author: geeksforgeeks
+//link : https://www.geeksforgeeks.org/android-recyclerview-in-kotlin/
 class ObservationAdapter(private val observations: List<BirdObservation> , private val geocoder: Geocoder) :
     RecyclerView.Adapter<ObservationAdapter.ObservationViewHolder>() {
 

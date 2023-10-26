@@ -1,6 +1,5 @@
 package com.example.birding.Observations
 
-
 import android.Manifest
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -28,28 +27,27 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-private lateinit var tvTitle: TextView
-private lateinit var etSpeciesName: EditText
-private lateinit var tvDate: TextView
-private lateinit var etDateInput: EditText
-private lateinit var tvLocation: TextView
-private lateinit var etLocation: EditText
-private lateinit var tvNotes: TextView
-private lateinit var etBirdNotes: EditText
-private lateinit var btnBack: Button
-private lateinit var btnSave: Button
-
-private lateinit var database: FirebaseDatabase
-private lateinit var fusedLocationClient: FusedLocationProviderClient
-private lateinit var dbReference: DatabaseReference
-
 class NewObservationActivity : AppCompatActivity() {
+    private lateinit var tvTitle: TextView
+    private lateinit var etSpeciesName: EditText
+    private lateinit var tvDate: TextView
+    private lateinit var etDateInput: EditText
+    private lateinit var tvLocation: TextView
+    private lateinit var etLocation: EditText
+    private lateinit var tvNotes: TextView
+    private lateinit var etBirdNotes: EditText
+    private lateinit var btnBack: Button
+    private lateinit var btnSave: Button
+    private lateinit var database: FirebaseDatabase
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var dbReference: DatabaseReference
     private val locationPermissionCode = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_observation)
 
+        // Initialize UI elements
         tvTitle = findViewById(R.id.tvTitle)
         etSpeciesName = findViewById(R.id.etSpeciesName)
         tvDate = findViewById(R.id.tvDate)
@@ -63,10 +61,9 @@ class NewObservationActivity : AppCompatActivity() {
 
         database = FirebaseDatabase.getInstance()
         dbReference = database.getReference("Observations")
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-
+        // Button click listeners
         btnBack.setOnClickListener {
             val intent = Intent(this, ObservationsActivity::class.java)
             startActivity(intent)
@@ -74,6 +71,9 @@ class NewObservationActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             saveObservation()
         }
+
+        val currentDateTime = SimpleDateFormat("dd EEE MMM yyyy HH:mm", Locale.US).format(Calendar.getInstance().time)
+        etDateInput.setText(currentDateTime)
 
         etLocation.isEnabled = false
         fetchLocation { location ->
@@ -106,6 +106,7 @@ class NewObservationActivity : AppCompatActivity() {
         }
     }
 
+    // Function to save the bird observation
     private fun saveObservation() {
         val species = etSpeciesName.text.toString()
         val notes = etBirdNotes.text.toString()
@@ -154,37 +155,13 @@ class NewObservationActivity : AppCompatActivity() {
         }
     }
 
-
+    // Function to fetch the location
     private fun fetchLocation(callback: (LatLng?) -> Unit) {
         if (hasLocationPermission()) {
             try {
                 fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                     val latLng = location?.run { LatLng(latitude, longitude) }
                     callback(latLng)
-
-                    // Convert latitude and longitude to an address
-                    latLng?.let { point ->
-                        val geocoder = Geocoder(this, Locale.getDefault())
-                        try {
-                            val addresses: List<Address>? = geocoder.getFromLocation(point.latitude, point.longitude, 1)
-                            if (addresses != null && addresses.isNotEmpty()) {
-                                val address = addresses[0]
-                                val streetAddress = address.getAddressLine(0)
-                                runOnUiThread {
-                                    etLocation.setText(streetAddress)
-                                }
-                            } else {
-                                runOnUiThread {
-                                    etLocation.setText("Location not found")
-                                }
-                            }
-                        } catch (e: IOException) {
-                            e.printStackTrace()
-                            runOnUiThread {
-                                etLocation.setText("Location not found")
-                            }
-                        }
-                    }
                 }
             } catch (securityException: SecurityException) {
                 securityException.printStackTrace()
@@ -198,7 +175,7 @@ class NewObservationActivity : AppCompatActivity() {
         }
     }
 
-
+    // Function to request location permission
     private fun requestLocationPermission() {
         ActivityCompat.requestPermissions(
             this,
@@ -207,6 +184,7 @@ class NewObservationActivity : AppCompatActivity() {
         )
     }
 
+    // Function to check if the location permission is granted
     private fun hasLocationPermission(): Boolean {
         val fineLocationPermission = ActivityCompat.checkSelfPermission(
             this,
@@ -219,7 +197,7 @@ class NewObservationActivity : AppCompatActivity() {
         return fineLocationPermission && coarseLocationPermission
     }
 
-
+    // Function to show date and time picker
     fun showDateTimePicker(view: View) {
         val calendar = Calendar.getInstance()
 
