@@ -41,18 +41,23 @@ import android.graphics.Paint
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.example.birding.Core.Species
+import com.example.birding.Core.SpeciesListResponse
 import com.example.birding.Home.HomeActivity
 import com.example.birding.Observations.ObservationsActivity
 import com.example.birding.R
+import com.example.birding.Settings.AccountSettingsActivity
+import com.example.birding.Settings.AccountSettingsActivity.Companion.IS_METRIC_PREFERENCE_KEY
+import com.example.birding.Settings.AccountSettingsActivity.Companion.MAX_DISTANCE_PREFERENCE_KEY
+import com.example.birding.Settings.AccountSettingsActivity.Companion.PREFERENCES_NAME
 import com.example.birding.Settings.SettingsActivity
-import com.example.birding.Settings.SettingsActivity.Companion.IS_METRIC_PREFERENCE_KEY
-import com.example.birding.Settings.SettingsActivity.Companion.MAX_DISTANCE_PREFERENCE_KEY
-import com.example.birding.Settings.SettingsActivity.Companion.PREFERENCES_NAME
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
+import com.google.gson.Gson
 
 // Class definition for HotspotsActivity
 class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -134,11 +139,12 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_home -> {
-                    // Home is already selected, do nothing.
+                    startActivity(Intent(this, HomeActivity::class.java))
+
                     true
                 }
                 R.id.menu_hotspots -> {
-                    startActivity(Intent(this, HotspotsActivity::class.java))
+                    // hotspots is already selected, do nothing.
                     true
                 }
                 R.id.menu_observations -> {
@@ -236,6 +242,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         hotspotDetailsFrameLayout.visibility = View.VISIBLE
         tvSelectedHotspot.visibility = View.VISIBLE
         btnHotspotDirection.visibility = View.VISIBLE
+        btnHotspotDirection.setBackgroundColor(ContextCompat.getColor(this, R.color.primary_blue))
 
         val unitPreference = sharedPreferences.getString(IS_METRIC_PREFERENCE_KEY, "Kilometers")
 
@@ -280,7 +287,29 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             tvDistanceToHotspot.visibility = View.GONE
         }
-
+//        btnHotspotDirection.setOnClickListener {
+//            if (isNavigating) {
+//                // User is navigating; stop the navigation
+//                isNavigating = false
+//                removeRoute()
+//                resetDirectionButton()
+//                stopLocationUpdates()
+//            } else {
+//                // User is not navigating; start navigation
+//                isNavigating = true
+//                btnHotspotDirection.apply {
+//                    text = "Stop"
+//                    setBackgroundColor(ContextCompat.getColor(this@HotspotsActivity, R.color.primary_red))
+//                }
+//                startLocationUpdates()
+//                // Calculate and display the route to the selected hotspot
+//                if (origin != null) {
+//                    calculateAndDisplayRoute(origin, marker.position)
+//                    // Fetch and display bird species data for the selected hotspot
+//                    marker.title?.let { it1 -> fetchBirdSpeciesData(it1) }
+//                }
+//            }
+//        }
         btnHotspotDirection.setOnClickListener {
             if (isNavigating) {
                 // User is navigating; stop the navigation
@@ -288,13 +317,25 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                 removeRoute()
                 resetDirectionButton()
                 stopLocationUpdates()
+                selectedMarker?.setIcon(customMarkerBird(this, 100))
+                selectedMarker = null
             } else {
                 // User is not navigating; start navigation
                 isNavigating = true
+
+
+//                btnHotspotDirection.setBackgroundResource(R.drawable.btn_background_red)
+//                btnHotspotDirection.setTextColor(ContextCompat.getColor(this, R.color.primary_red))
+//                btnHotspotDirection.setBackgroundColor(0xFFFF0000.toInt()) // Red color
+
                 btnHotspotDirection.apply {
                     text = "Stop"
                     setBackgroundColor(ContextCompat.getColor(this@HotspotsActivity, R.color.primary_red))
+
                 }
+                Log.d("ButtonColors", "Background Color: ${btnHotspotDirection.background}")
+                Log.d("ButtonColors", "Text Color: ${btnHotspotDirection.currentTextColor}")
+
                 startLocationUpdates()
                 // Calculate and display the route to the selected hotspot
                 if (origin != null) {
@@ -309,6 +350,8 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
             text = "Get Directions"
             setBackgroundColor(ContextCompat.getColor(this@HotspotsActivity, R.color.primary_blue))
         }
+        centerMapOnUserLocation()
+        hotspotDetailsFrameLayout.visibility = View.GONE
     }
 
     private fun calculateDistance(origin: LatLng, destination: LatLng): Float {
@@ -478,6 +521,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         request.setCallback(object : PendingResult.Callback<DirectionsResult?> {
             override fun onResult(result: DirectionsResult?) {
+                runOnUiThread {
                 if (result != null) {
                     // Remove the previous route if it exists
                     removeRoute()
@@ -485,7 +529,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                     // Draw the route on the map
                     val decodedPath = decodePolyline(result.routes[0].overviewPolyline.encodedPath)
 
-                    runOnUiThread {
+
                         // Update UI on the main thread
                         currentRoute = googleMap.addPolyline(
                             PolylineOptions()
@@ -504,11 +548,12 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                         val padding = 100
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
                     }
-                } else {
+                 else {
                     // Handle error or display a message
                     runOnUiThread {
                         Toast.makeText(this@HotspotsActivity, "Error calculating route", Toast.LENGTH_SHORT).show()
                     }
+                }
                 }
             }
 
@@ -639,6 +684,147 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
+
+//    private fun fetchBirdSpeciesData(hotspotId: String) {
+//        val apiKey = "AIzaSyDHTmCbWEXU66wNV7hIIhaBPPJqXjnJX6I"
+//        val eBirdAPIUrl = "https://api.ebird.org/v2/product/spplist/za"
+//
+//        val url = URL(eBirdAPIUrl)
+//        thread {
+//            try {
+//                val connection = url.openConnection() as HttpURLConnection
+//                connection.requestMethod = "GET"
+//                connection.setRequestProperty("X-eBirdApiToken", apiKey)
+//
+//                val responseCode = connection.responseCode
+//                if (responseCode == HttpURLConnection.HTTP_OK) {
+//                    val inputStream = connection.inputStream
+//                    val jsonData = inputStream.bufferedReader().use { it.readText() }
+//
+//                    runOnUiThread {
+//                        displayBirdSpeciesData(jsonData)
+//                    }
+//                } else {
+//                    runOnUiThread {
+//                        Toast.makeText(
+//                            this@HotspotsActivity,
+//                            "Error fetching bird species data: $responseCode",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
+//
+//                connection.disconnect()
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//                runOnUiThread {
+//                    Toast.makeText(
+//                        this@HotspotsActivity,
+//                        "Error fetching bird species data: ${e.message}",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//        }
+//    }
+
+//    private fun fetchBirdSpeciesData(location: LatLng) {
+//        val apiKey = "h5qidkb3h7cv"
+//        // EBIRD API 2.0
+//        val eBirdAPIUrl = "https://api.ebird.org/v2/product/spplist/$hotspotId/recent"
+//
+//        // Create URL object
+//        var url: URL? = null
+//        try {
+//            url = URL(eBirdAPIUrl)
+//            thread {
+//                try {
+//                    // Create an HTTP URL connection
+//                    val connection = url.openConnection() as HttpURLConnection
+//                    connection.requestMethod = "GET"
+//
+//                    // Add the API key to the request headers
+//                    connection.setRequestProperty("X-eBirdApiToken", apiKey)
+//
+//                    // Get the response code
+//                    val responseCode = connection.responseCode
+//                    // Check if the request was successful (HTTP status code 200)
+//                    if (responseCode == HttpURLConnection.HTTP_OK) {
+//                        // Fetch data from the connection
+//                        val inputStream = connection.inputStream
+//                        val urlData = inputStream.bufferedReader().use { it.readText() }
+//
+//                        // Parse JSON data
+//                        try {
+//                            val responseString = urlData.trim() // Trim any leading/trailing whitespace
+//
+//                            if (responseString.startsWith("[")) {
+//                                // Valid JSON array response
+//                                val speciesArray = JSONArray(responseString)
+//                                // Process the JSON array here
+//                                for (i in 0 until speciesArray.length()) {
+//                                    val hotspot = speciesArray.getJSONObject(i)
+//                                    val name = hotspot.getString("locName")
+//                                    val lat = hotspot.getDouble("lat")
+//                                    val lng = hotspot.getDouble("lng")
+//                                    val hotspotLocation = LatLng(lat, lng)
+//
+//                                    // Add markers for each hotspot
+//                                    runOnUiThread {
+//                                        googleMap.addMarker(
+//                                            MarkerOptions()
+//                                                .position(hotspotLocation)
+//                                                .title(name)
+//                                                .icon(customMarkerBird(this,100))
+//                                                .zIndex(1.0f))
+//                                    }
+//                                }
+//                            } else {
+//                                // Handle other types of responses or errors
+//                                runOnUiThread {
+//                                    Toast.makeText(this@HotspotsActivity, "Unexpected API response: $urlData", Toast.LENGTH_SHORT).show()
+//                                }
+//                            }
+//                        } catch (e: JSONException) {
+//                            e.printStackTrace()
+//                            // Handle JSON parsing error
+//                            runOnUiThread {
+//                                Toast.makeText(this@HotspotsActivity, "Error parsing eBird data: ${e.message}", Toast.LENGTH_SHORT).show()
+//                            }
+//                        }
+//                    } else {
+//                        // Handle HTTP error here (e.g., display an error message)
+//                        runOnUiThread {
+//                            Toast.makeText(this@HotspotsActivity, "HTTP error: $responseCode", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                    // Close the connection
+//                    connection.disconnect()
+//                } catch (e: Exception) {
+//                    e.printStackTrace()
+//                    // Handle other exceptions here
+//                    runOnUiThread {
+//                        Toast.makeText(this@HotspotsActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            }
+//        } catch (e: MalformedURLException) {
+//            e.printStackTrace()
+//        }
+//    }
+//    private fun displayBirdSpeciesData(jsonData: String) {
+//        val recyclerView: RecyclerView = findViewById(R.id.recyclerViewBirdSpecies)
+//        val birdSpeciesList = parseJsonData(jsonData)  // Implement a method to parse JSON data and extract bird species information
+//        val adapter = BirdSpeciesAdapter(birdSpeciesList)  // Create a custom adapter for displaying bird species
+//        recyclerView.adapter = adapter
+//    }
+//
+//    private fun parseJsonData(jsonData: String): List<Species> {
+//        val gson = Gson()
+//        val speciesListResponse = gson.fromJson(jsonData, SpeciesListResponse::class.java)
+//        return speciesListResponse.species
+//    }
+
 
 
 }

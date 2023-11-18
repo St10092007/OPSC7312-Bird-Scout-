@@ -6,151 +6,325 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Settings.ProfileActivity"
-    android:background="@color/primary_grey">
+    android:background="@color/background_grey">
 
-    <!-- Logo Background -->
-    <ImageView
-        android:id="@+id/ivLogoBackground"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:src="@drawable/logobackground"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="30dp" />
-
-    <!-- Title -->
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Profile"
-        android:textAlignment="center"
-        android:textColor="@color/secondary"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toTopOf="@id/cvMainContainer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivLogoBackground" />
-
-    <!-- Main Container -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cvMainContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="4dp"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:background="@drawable/box"
-            >
+            android:orientation="vertical">
 
-            <!-- Progress Bar -->
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvProfileName"
-                android:layout_marginTop="16dp"
-                android:textSize="20dp"
-                android:text="Profile Name : "
-                android:textColor="@color/text_color"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvProfileSurname"
-                android:layout_marginTop="16dp"
-                android:textSize="20dp"
-                android:text="Profile Surname : "
-                android:textColor="@color/text_color"
-                />
-
-
-            <!-- Profile Information -->
-            <EditText
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/etProfileName"
-                android:textColor="@color/text_color"
-                android:hint="Name"
-                android:textSize="18sp"
-                android:layout_marginTop="16dp" />
+                android:layout_height="match_parent">
+
+                <!-- Logo Background -->
+<!--                <ImageView-->
+<!--                    android:id="@+id/ivLogoBackground"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="100dp"-->
+<!--                    android:scaleType="fitXY"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:srcCompat="@drawable/top_background" />-->
+
+                <ImageView
+                    android:id="@+id/ivLogoBackground"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:src="@drawable/logobackground"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Profile Settings"
+                    android:layout_marginTop="16dp"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_color"
+                    app:layout_constraintEnd_toEndOf="@+id/ivLogoBackground"
+                    app:layout_constraintStart_toStartOf="@+id/ivLogoBackground"
+                    app:layout_constraintTop_toBottomOf="@+id/ivLogoBackground" />
+
+                <LinearLayout
+                    android:id="@+id/settingsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView">
+
+                    <!-- Progress Bar -->
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvSettingCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="14dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="@color/white">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tvMeasurementUnits"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Profile Name"
+                                android:textSize="18sp"
+                                android:textColor="@color/accent"
+                                android:layout_marginTop="10dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:background="@drawable/input_background"
+                                >
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tvProfileName"
+                                    android:layout_marginTop="16dp"
+                                    android:textSize="20dp"
+                                    android:text=" "
+                                    android:textColor="@color/text_color"
+                                    />
+
+                            </LinearLayout>
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Profile Surname"
+                                android:textSize="18sp"
+                                android:textColor="@color/accent"
+                                android:layout_marginTop="10dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:background="@drawable/input_background"
+                                android:layout_marginBottom="20dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/tvProfileSurname"
+                                    android:layout_marginTop="16dp"
+                                    android:textSize="20dp"
+                                    android:text=""
+                                    android:textColor="@color/text_color"
+                                    />
+                            </LinearLayout>
+                        </LinearLayout>
 
 
 
-            <EditText
-                android:id="@+id/etProfileSurname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:textColor="@color/text_color"
-                android:hint="Surname" />
+                    </androidx.cardview.widget.CardView>
 
-            <EditText
-                android:id="@+id/etOldPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Old Password"
-                android:inputType="textPassword"
-                android:layout_marginTop="12dp"
-                android:textColor="@color/text_color"
-                />
 
-            <EditText
-                android:id="@+id/etNewPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="New Password"
-                android:inputType="textPassword"
-                android:layout_marginTop="12dp"
-                android:textColor="@color/text_color"
-                />
+                    <ImageView android:id="@+id/line"
+                        android:src="@drawable/line"
+                        android:contentDescription="line_5"
+                        android:paddingHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Edit Profile"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/accent"
+                        android:layout_marginTop="10dp"
+                        android:layout_gravity="center_horizontal"/>
+
+                            <!-- Profile Information -->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cvLoginCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="14dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="@color/white">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Name"
+                        android:textSize="18sp"
+                        android:textColor="@color/accent"
+                        android:layout_marginTop="10dp"
+                        />
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:id="@+id/etProfileName"
+                                android:textColor="@color/text_color"
+                                android:textColorHint="@color/primary_grey"
+                                android:hint="Name"
+                                android:textSize="18sp"
+                                android:background="@drawable/input_background"/>
+
+                        <ImageView
+                        android:src="@drawable/line"
+                        android:contentDescription="line_5"
+                        android:paddingHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Surname"
+                                android:textSize="18sp"
+                                android:textColor="@color/accent"
+                                android:layout_marginTop="10dp"
+                                />
+                            <EditText
+                                android:id="@+id/etProfileSurname"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:textColor="@color/text_color"
+                                android:textColorHint="@color/primary_grey"
+                                android:textSize="18sp"
+                                android:hint="Surname"
+                                android:background="@drawable/input_background"/>
+                    <ImageView
+                        android:src="@drawable/line"
+                        android:contentDescription="line_5"
+                        android:paddingHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Old Password"
+                                android:textSize="18sp"
+                                android:textColor="@color/accent"
+                                android:layout_marginTop="10dp"
+                                />
+                            <EditText
+                                android:id="@+id/etOldPassword"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:hint="Old Password"
+                                android:inputType="textPassword"
+                                android:textColorHint="@color/primary_grey"
+                                android:textColor="@color/text_color"
+                                android:background="@drawable/input_background"
+                                />
+                    <ImageView
+                        android:src="@drawable/line"
+                        android:contentDescription="line_5"
+                        android:paddingHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="New Password"
+                                    android:textSize="18sp"
+                                    android:textColor="@color/accent"
+                                    android:layout_marginTop="10dp"
+                                    />
+
+                            <EditText
+                                android:id="@+id/etNewPassword"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:hint="New Password"
+                                android:inputType="textPassword"
+                                android:textColorHint="@color/primary_grey"
+                                android:textColor="@color/text_color"
+                                android:background="@drawable/input_background"
+                                android:layout_marginBottom="20dp"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/buttonsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="@id/settingsLayout"
+                    app:layout_constraintStart_toStartOf="@id/settingsLayout"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsLayout">
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_columnWeight="1"
+                        android:text="Edit"
+                        android:backgroundTint="@color/primary_blue"
+                        android:textColor="@color/text_color"
+                        style="@android:style/Widget.Button"
+                        android:background="@drawable/btn_background_red"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnBack"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_columnWeight="1"
+                            android:text="Back"
+                            android:backgroundTint="@color/primary_red"
+                            android:textColor="@color/text_color"
+                            style="@android:style/Widget.Button"
+                            android:background="@drawable/btn_background_red"
+                            android:layout_marginEnd="32dp"
+                            android:layout_marginStart="32dp"
+                            android:layout_marginTop="16dp"/>
+
+
+               </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Buttons -->
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/cvMainContainer"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <Button
-            android:id="@+id/btnBack"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:text="Back"
-            android:backgroundTint="@color/primary_red"
-            android:textColor="@color/text_color" />
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
-            android:text="Edit"
-            android:backgroundTint="@color/primary_blue"
-            android:textColor="@color/text_color" />
-    </GridLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
