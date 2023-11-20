@@ -16,17 +16,24 @@
         android:theme="@style/Theme.Birding"
         tools:targetApi="31">
         <activity
+            android:name=".AchievementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Achievement.AchievementsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Design.NoActionBar" />
+        <activity
             android:name=".Observations.ObservationMapsActivity"
             android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar"/>
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".Settings.PrivacyPolicyActivity"
             android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar"/>
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".Settings.AccountSettingsActivity"
             android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar"/>
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".Observations.NewObservationActivity"
             android:exported="false"

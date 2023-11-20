@@ -94,7 +94,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun onReturnClicked() {
-        val intent = Intent(this, SettingsActivity::class.java)
+        val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
     }
 

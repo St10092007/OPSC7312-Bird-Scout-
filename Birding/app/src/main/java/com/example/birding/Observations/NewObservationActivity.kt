@@ -23,6 +23,11 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.birding.Achievement.AchievementsActivity
+import com.example.birding.Achievement.AchievementsAdapter
+import com.example.birding.Observation.ObservationAdapter
 import com.example.birding.R
 import com.example.birding.Settings.AccountSettingsActivity
 import com.example.birding.Settings.AccountSettingsActivity.Companion.IS_METRIC_PREFERENCE_KEY
@@ -57,7 +62,7 @@ import java.net.URL
 import kotlin.concurrent.thread
 
 
-class NewObservationActivity : AppCompatActivity() {
+class NewObservationActivity : AppCompatActivity(), ObservationDeleteListener {
     private lateinit var tvTitle: TextView
     private lateinit var etSpeciesName: EditText
     private lateinit var tvDate: TextView
@@ -75,10 +80,13 @@ class NewObservationActivity : AppCompatActivity() {
     private var selectedImageBitmap: Bitmap? = null
     private lateinit var observationTypeSpinner: Spinner
     private lateinit var sharedPreferences: SharedPreferences
-
+    private lateinit var recyclerView: RecyclerView
     private lateinit var etLocation: TextView
     private lateinit var placesClient: PlacesClient
     private lateinit var autocompleteFragment: AutocompleteSupportFragment
+    private lateinit var observationAdapter: ObservationAdapter
+    private val observationsList: MutableList<BirdObservation> = mutableListOf()
+    private lateinit var achievementsIntent: Intent
     private var autocompleteSessionToken: AutocompleteSessionToken? = null
 
     private var selectedPlace: Place? = null
@@ -105,13 +113,18 @@ class NewObservationActivity : AppCompatActivity() {
         dbReference = database.getReference("Observations")
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-
+        achievementsIntent = Intent(this, AchievementsActivity::class.java)
         observationTypeSpinner = findViewById(R.id.observationTypeSpinner)
         val observationTypes = resources.getStringArray(R.array.observation_types)
 
         val adapter = ArrayAdapter(this, R.layout.spinner_dropdown_item, observationTypes)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         observationTypeSpinner.adapter = adapter
+
+        val geocoder = Geocoder(this, Locale.getDefault())
+
+        // Ensure that observationAdapter is initialized (you may need to adjust this based on your data source)
+        observationAdapter = ObservationAdapter(observationsList, geocoder, this)
 
 
         observationTypeSpinner.onItemSelectedListener =
@@ -317,6 +330,8 @@ class NewObservationActivity : AppCompatActivity() {
                 observationType
             )
             saveObservationToFirebase(sighting)
+
+
         } else {
             // Handle the case where no location is selected
             Toast.makeText(this, "Please select a location", Toast.LENGTH_SHORT).show()
@@ -331,14 +346,45 @@ class NewObservationActivity : AppCompatActivity() {
             val dbReference = database.getReference("Observations").child(userId).child(sighting.observationId)
 
             dbReference.setValue(sighting).addOnSuccessListener {
+
+                ObservationManager.incrementObservationCount()
+                updateAchievementStatus()
+                ObservationManager.broadcastObservationAdded(applicationContext)
+
                 val intent = Intent(this, ObservationsActivity::class.java)
                 startActivity(intent)
+                finish()
                 Toast.makeText(this, "Bird observation added successfully", Toast.LENGTH_SHORT).show()
             }.addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to add bird observation: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
+    fun updateAchievementStatus() {
+        // Use the observationAdapter to get the count of observations
+        val observationCount = observationAdapter.itemCount
+
+        updateAchievementStatus(0, observationCount)
+        updateAchievementStatus(1, observationCount)
+        updateAchievementStatus(2, observationCount) // Update for species count
+        updateAchievementStatus(3, observationCount) // Update for species count
+        updateAchievementStatus(4, observationCount) // Update for species count
+        updateAchievementStatus(5, observationCount)
+        updateAchievementStatus(6, observationCount) // Update for species count
+        updateAchievementStatus(7, observationCount) // Update for species count
+        updateAchievementStatus(8, observationCount) // Update for species count
+        updateAchievementStatus(9, observationCount) // Update for species count
+    }
+
+        // Repeat this pattern for other achievements
+
+    private fun updateAchievementStatus(position: Int, observationCount: Int) {
+        // Pass the achievement status to AchievementsActivity using Intent
+        achievementsIntent.putExtra("position", position)
+        achievementsIntent.putExtra("observationCount", observationCount)
+        startActivity(achievementsIntent)
+    }
+
 
 
     private fun encodeBitmapToBase64(bitmap: Bitmap): String {
@@ -472,6 +518,10 @@ class NewObservationActivity : AppCompatActivity() {
             calendar.get(Calendar.DAY_OF_MONTH)
         )
         datePickerDialog.show()
+    }
+
+    override fun onDelete(observationId: String) {
+        TODO("Not yet implemented")
     }
 
 }

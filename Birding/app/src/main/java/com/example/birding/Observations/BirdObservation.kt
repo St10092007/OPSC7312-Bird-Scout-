@@ -15,7 +15,11 @@ data class BirdObservation(
     val observationType: String
 
 ) : Parcelable {
+
+
     constructor() : this("","","", "", LatLng(0.0, 0.0), "","")
+    {}
+
 
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -25,7 +29,9 @@ data class BirdObservation(
         parcel.readParcelable(LatLng::class.java.classLoader) ?: LatLng(0.0, 0.0),
         parcel.readString() ?: "",
         parcel.readString() ?: ""
-    )
+    ){}
+
+
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(observationId)

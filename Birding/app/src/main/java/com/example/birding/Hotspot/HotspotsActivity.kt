@@ -41,13 +41,12 @@ import android.graphics.Paint
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.widget.TooltipCompat
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
-import com.example.birding.Core.Species
-import com.example.birding.Core.SpeciesListResponse
+import com.example.birding.Achievement.AchievementsActivity
 import com.example.birding.Home.HomeActivity
+import com.example.birding.Observations.BirdObservation
+import com.example.birding.Observations.ObservationManager
 import com.example.birding.Observations.ObservationsActivity
 import com.example.birding.R
-import com.example.birding.Settings.AccountSettingsActivity
 import com.example.birding.Settings.AccountSettingsActivity.Companion.IS_METRIC_PREFERENCE_KEY
 import com.example.birding.Settings.AccountSettingsActivity.Companion.MAX_DISTANCE_PREFERENCE_KEY
 import com.example.birding.Settings.AccountSettingsActivity.Companion.PREFERENCES_NAME
@@ -57,7 +56,6 @@ import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
-import com.google.gson.Gson
 
 // Class definition for HotspotsActivity
 class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -78,6 +76,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var sharedPreferences: SharedPreferences
     private var isNavigating = false
+    private val observationsList: MutableList<BirdObservation> = mutableListOf()
 
     // onCreate method called when the activity is created
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -128,18 +127,23 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
         val hotspotsMenuItem = bottomNavigationView.menu.findItem(R.id.menu_hotspots)
         val homeMenuItem = bottomNavigationView.menu.findItem(R.id.menu_home)
         val settingsMenuItem = bottomNavigationView.menu.findItem(R.id.menu_settings)
+        val achievementMenuItem = bottomNavigationView.menu.findItem(R.id.menu_achievement)
+
 
         // Set tooltips for navigation items
         observationMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Observations") }
         hotspotsMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Hotspots") }
         homeMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Home") }
         settingsMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Settings") }
+        achievementMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Achievements") }
+
 
         // Bottom navigation item click listener
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_home -> {
                     startActivity(Intent(this, HomeActivity::class.java))
+
 
                     true
                 }
@@ -149,10 +153,19 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 R.id.menu_observations -> {
                     startActivity(Intent(this, ObservationsActivity::class.java))
+
+                    true
+                }
+                R.id.menu_achievement -> {
+                    val intent = Intent(this, AchievementsActivity::class.java)
+//                    intent.putExtra("observationCount", ObservationManager.getObservationCount())
+                    startActivity(intent)
+
                     true
                 }
                 R.id.menu_settings -> {
                     startActivity(Intent(this, SettingsActivity::class.java))
+
                     true
                 }
                 else -> false

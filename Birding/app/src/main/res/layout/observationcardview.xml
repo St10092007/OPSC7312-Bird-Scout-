@@ -9,7 +9,7 @@
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
-        android:backgroundTint="@color/background_grey">
+        android:backgroundTint="@color/white">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -164,7 +164,7 @@
                     <!--            button to expand -->
                     <ImageButton
                         android:id="@+id/arrow_button"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="20dp"
                         android:src="@drawable/down_arrow"
                         android:layout_gravity="right"

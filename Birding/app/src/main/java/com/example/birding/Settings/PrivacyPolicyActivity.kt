@@ -19,6 +19,8 @@ class PrivacyPolicyActivity : AppCompatActivity() {
     private lateinit var tvPrivacyPolicyHeader: TextView
     private lateinit var tvPrivacyPolicyContent: TextView
     private lateinit var btnViewFullPrivacyPolicy: AppCompatButton
+    private lateinit var btnback: AppCompatButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,8 @@ class PrivacyPolicyActivity : AppCompatActivity() {
         tvPrivacyPolicyHeader = findViewById(R.id.tvPrivacyPolicyHeader)
         tvPrivacyPolicyContent = findViewById(R.id.tvPrivacyPolicyContent)
         btnViewFullPrivacyPolicy = findViewById(R.id.btnViewFullPrivacyPolicy)
+        btnback = findViewById(R.id.btnBack)
+
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         loadPrivacyPolicyContent()
@@ -44,11 +48,11 @@ class PrivacyPolicyActivity : AppCompatActivity() {
             }
         }
 
-    }
-    override fun onSupportNavigateUp(): Boolean {
-        // Handle the back button press
-        onBackPressed()
-        return true
+        btnback.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun loadPrivacyPolicyContent() {
