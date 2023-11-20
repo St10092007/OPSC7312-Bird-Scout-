@@ -25,10 +25,22 @@
         android:layout_marginEnd="20dp"
         android:text="Login"
         android:textAlignment="center"
-        android:textColor="@color/accent"
+        android:textColor="@color/text_color"
         android:textSize="30sp"
         android:textStyle="bold"
         android:layout_gravity="center_horizontal"
+        />
+
+    <TextView
+        android:id="@+id/instructionsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter your information below:"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textSize="18sp"
+        android:textColor="@color/accent"
         />
 
 

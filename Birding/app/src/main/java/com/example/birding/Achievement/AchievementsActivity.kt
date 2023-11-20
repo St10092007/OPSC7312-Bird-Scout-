@@ -40,6 +40,7 @@ class AchievementsActivity : AppCompatActivity() , ObservationDeleteListener {
     lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var observationManager: ObservationManager
     private lateinit var observationAdapter: ObservationAdapter
+    private lateinit var achievementsAdapter: AchievementsAdapter
     private val observationsList: MutableList<BirdObservation> = mutableListOf()
     private lateinit var progressBar: ProgressBar
 
@@ -77,7 +78,7 @@ class AchievementsActivity : AppCompatActivity() , ObservationDeleteListener {
 
         // Retrieve achievement status from Intent
 //        val position = intent.getIntExtra("position", -1)
-        val observationCount = getObservationCount(getCurrentUserUid())
+        val observationCount = observationsList.size
 
 //        if (position != -1) {
 //            updateAchievementStatus(position, observationCount)
@@ -92,8 +93,8 @@ class AchievementsActivity : AppCompatActivity() , ObservationDeleteListener {
         val geocoder = Geocoder(this, Locale.getDefault())
         observationAdapter = ObservationAdapter(observationsList, geocoder, this)
 
-        val adapter = AchievementsAdapter(AchievementsAdapter.achievementsList, observationCount)
-        recyclerView.adapter = adapter
+        achievementsAdapter = AchievementsAdapter(AchievementsAdapter.achievementsList, observationCount)
+        recyclerView.adapter = achievementsAdapter
 
         // Check if the achievements list is empty
         if (AchievementsAdapter.achievementsList.isEmpty()) {
@@ -104,8 +105,8 @@ class AchievementsActivity : AppCompatActivity() , ObservationDeleteListener {
 //        if (position != -1) {
 //            updateAchievementStatus(position, observationCount)
 //        }
-        updateAchievementStatus()
-        updateAchievementStatus(observationsList.count())
+//        updateAchievementStatus()
+//        updateAchievementStatus(observationsList.count())
         setupBottomNavigation()
     }
 
@@ -143,11 +144,12 @@ class AchievementsActivity : AppCompatActivity() , ObservationDeleteListener {
                     val latitude = observationSnapshot.child("location").child("latitude").getValue(Double::class.java)
                     val longitude = observationSnapshot.child("location").child("longitude").getValue(Double::class.java)
                     val notes = observationSnapshot.child("notes").getValue(String::class.java)
+                    val fullName = observationSnapshot.child("fullName").getValue(String::class.java)
                     val observationType = observationSnapshot.child("observationType").getValue(String::class.java) ?: "Unknown"
 
-                    if (observationId != null && species != null && dateTime != null && latitude != null && longitude != null && notes != null && observationType != null) {
+                    if (observationId != null && species != null && dateTime != null && latitude != null && longitude != null && notes != null && observationType != null && fullName!=null) {
                         val location = LatLng(latitude, longitude)
-                        val observation = BirdObservation(observationId, null, species, dateTime, location, notes, observationType)
+                        val observation = BirdObservation(observationId, null, species, dateTime, location, notes, observationType,fullName)
                         newObservationsList.add(observation)
                         incrementObservationCount()
                     }
@@ -158,7 +160,8 @@ class AchievementsActivity : AppCompatActivity() , ObservationDeleteListener {
                     updateAchievementStatus(newObservationsList.size)
                     Log.d("AchievementActivity", "Updated Observations Count: ${newObservationsList.size}")
 
-//                    updateAchievementStatus(newObservationsList)
+                    achievementsAdapter.notifyDataSetChanged()
+
 
                 }
 
@@ -260,7 +263,7 @@ class AchievementsActivity : AppCompatActivity() , ObservationDeleteListener {
         updateAchievementStatus(8, observationsListCount)
         updateAchievementStatus(9, observationsListCount)
 
-        Log.d("AchievementsActivity", "updateAchievementStatus() called with observationCount: ${observationsList.size}")
+        Log.d("AchievementsActivity", "updateAchievementStatus() called with observationCount: $observationsListCount")
     }
 
     // Function to show an empty state if there are no achievements

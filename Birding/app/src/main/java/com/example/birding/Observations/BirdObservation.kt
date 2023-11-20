@@ -12,12 +12,13 @@ data class BirdObservation(
     val dateTime: String,
     val location: LatLng,
     val notes: String,
-    val observationType: String
+    val observationType: String,
+    val fullName: String,
 
 ) : Parcelable {
 
 
-    constructor() : this("","","", "", LatLng(0.0, 0.0), "","")
+    constructor() : this("","","", "", LatLng(0.0, 0.0), "","","")
     {}
 
 
@@ -28,7 +29,8 @@ data class BirdObservation(
         parcel.readString() ?: "",
         parcel.readParcelable(LatLng::class.java.classLoader) ?: LatLng(0.0, 0.0),
         parcel.readString() ?: "",
-        parcel.readString() ?: ""
+        parcel.readString() ?: "",
+        ""
     ){}
 
 
@@ -41,6 +43,8 @@ data class BirdObservation(
         parcel.writeParcelable(location, flags)
         parcel.writeString(notes)
         parcel.writeString(observationType)
+        parcel.writeString(fullName)
+
     }
 
     override fun describeContents(): Int {

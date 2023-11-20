@@ -32,14 +32,28 @@
                     />
 
                 <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/profileImageView"
+                    android:layout_width="256dp"
+                    android:layout_height="256dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="20dp"
                     app:layout_constraintStart_toStartOf="@+id/ivLogoBackground"
                     app:layout_constraintTop_toBottomOf="@+id/ivLogoBackground"
-                    app:srcCompat="@drawable/user" />
+                    app:srcCompat="@drawable/user"
+                    android:background="@drawable/circular_background"
+                    android:scaleType="centerCrop"/>
+
+                <Button
+                    android:id="@+id/changeProfilePictureButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Change Profile Picture"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/btn_background_red"
+                    android:textColor="@color/text_color"
+                    app:layout_constraintTop_toBottomOf="@+id/profileImageView"
+                    app:layout_constraintStart_toStartOf="@+id/profileImageView"
+                    app:layout_constraintEnd_toEndOf="@+id/profileImageView" />
 
                 <TextView
                     android:id="@+id/displayNameTextView"
@@ -49,10 +63,10 @@
                     android:layout_marginTop="16dp"
                     android:textSize="25sp"
                     android:textStyle="bold"
-                    android:textColor="@color/accent"
-                    app:layout_constraintEnd_toEndOf="@+id/imageView2"
-                    app:layout_constraintStart_toStartOf="@+id/imageView2"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+                    android:textColor="@color/text_color"
+                    app:layout_constraintEnd_toEndOf="@+id/changeProfilePictureButton"
+                    app:layout_constraintStart_toStartOf="@+id/changeProfilePictureButton"
+                    app:layout_constraintTop_toBottomOf="@+id/changeProfilePictureButton" />
 
                 <TextView
                     android:id="@+id/emailTextView"

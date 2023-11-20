@@ -669,7 +669,7 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun customMarkerBird(context: Context, targetSize: Int): BitmapDescriptor {
         // Load the dove icon from your drawables
-        val doveIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.dove)
+        val doveIcon: Drawable? = ContextCompat.getDrawable(context, R.drawable.bunting)
 
         if (doveIcon is BitmapDrawable) {
             val originalBitmap = doveIcon.bitmap
@@ -686,17 +686,50 @@ class HotspotsActivity : AppCompatActivity(), OnMapReadyCallback {
     //Date: Last updated 2023-10-23
     //link : https://developer.android.com/training/maps/maps-and-places
     private fun createCustomMarker(): BitmapDescriptor {
-        val circleRadius = 50
+        val circleRadius = 60
 
         val bitmap = Bitmap.createBitmap(circleRadius * 2, circleRadius * 2, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         val paint = Paint()
-        paint.color = Color.RED
+        paint.color = Color.BLACK
+        paint.alpha = 80 // Set alpha value for transparency
         paint.isAntiAlias = true
         canvas.drawCircle(circleRadius.toFloat(), circleRadius.toFloat(), circleRadius.toFloat(), paint)
 
         return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
+//    private fun createCustomMarker(context: Context): BitmapDescriptor {
+//        val circleRadius = 50
+//        val pinDrawable = getPinDrawable(context) // Pass the context to getPinDrawable
+//
+//        val bitmap = Bitmap.createBitmap(circleRadius * 2, circleRadius * 2, Bitmap.Config.ARGB_8888)
+//        val canvas = Canvas(bitmap)
+//
+//        // Draw translucent circle
+//        val circlePaint = Paint()
+//        circlePaint.color = Color.LTGRAY
+//        circlePaint.alpha = 100 // Set alpha value for transparency
+//        circlePaint.isAntiAlias = true
+//        canvas.drawCircle(circleRadius.toFloat(), circleRadius.toFloat(), circleRadius.toFloat(), circlePaint)
+//
+//        // Draw custom pin on top of the circle
+//        val pinWidth = pinDrawable.intrinsicWidth
+//        val pinHeight = pinDrawable.intrinsicHeight
+//        pinDrawable.setBounds((circleRadius - pinWidth / 2), (circleRadius - pinHeight), (circleRadius + pinWidth / 2), circleRadius)
+//        pinDrawable.draw(canvas)
+//
+//        return BitmapDescriptorFactory.fromBitmap(bitmap)
+//    }
+
+//    private fun getPinDrawable(context: Context): Drawable {
+//        // Replace this with your own implementation to obtain a custom pin drawable
+//        // For example, you can use ContextCompat.getDrawable(context, R.drawable.your_pin_icon)
+//        // or load a drawable from resources or assets.
+//        // Make sure to handle scaling appropriately based on the dimensions of the circle.
+//        // Ensure that the drawable has a transparent background if you want the circle to be visible behind it.
+//        // For simplicity, I'm returning a basic pin drawable here.
+//        return ContextCompat.getDrawable(context, R.drawable.pin)!!
+//    }
 
 //    private fun fetchBirdSpeciesData(hotspotId: String) {
 //        val apiKey = "AIzaSyDHTmCbWEXU66wNV7hIIhaBPPJqXjnJX6I"

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Settings.PrivacyPolicyActivity">
+    tools:context=".Settings.PrivacyPolicyActivity"
+    android:background="@color/background_grey">
 
     <ImageView
         android:id="@+id/ivLogoBackground"
@@ -46,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style="@android:style/Widget.Button"
-        android:background="@drawable/btn_background_red"
+        android:background="@drawable/btn_background_1"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"

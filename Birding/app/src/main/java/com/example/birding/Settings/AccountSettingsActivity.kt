@@ -98,7 +98,7 @@ class AccountSettingsActivity : AppCompatActivity() {
         }
 
         returnButton.setOnClickListener {
-            val intent = Intent(this, HomeActivity::class.java)
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }
     }

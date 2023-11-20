@@ -157,107 +157,114 @@
                         android:layout_height="wrap_content" />
 
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Edit Profile"
-                        android:textSize="25sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/accent"
-                        android:layout_marginTop="10dp"
-                        android:layout_gravity="center_horizontal"/>
-
-                            <!-- Profile Information -->
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cvLoginCard"
+                    <LinearLayout
+                        android:id="@+id/llEditProfile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="14dp">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-                        <LinearLayout
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Edit Profile"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/accent"
+                            android:layout_marginTop="10dp"
+                            android:layout_gravity="center_horizontal"/>
+
+                        <!-- Profile Information -->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cvLoginCard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:background="@color/white">
+                            android:layout_margin="10dp"
+                            app:cardCornerRadius="12dp"
+                            app:cardElevation="14dp">
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Name"
-                        android:textSize="18sp"
-                        android:textColor="@color/accent"
-                        android:layout_marginTop="10dp"
-                        />
-                            <EditText
+                            <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:id="@+id/etProfileName"
-                                android:textColor="@color/text_color"
-                                android:textColorHint="@color/primary_grey"
-                                android:hint="Name"
-                                android:textSize="18sp"
-                                android:background="@drawable/input_background"/>
-
-                        <ImageView
-                        android:src="@drawable/line"
-                        android:contentDescription="line_5"
-                        android:paddingHorizontal="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Surname"
-                                android:textSize="18sp"
-                                android:textColor="@color/accent"
-                                android:layout_marginTop="10dp"
-                                />
-                            <EditText
-                                android:id="@+id/etProfileSurname"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:textColor="@color/text_color"
-                                android:textColorHint="@color/primary_grey"
-                                android:textSize="18sp"
-                                android:hint="Surname"
-                                android:background="@drawable/input_background"/>
-                    <ImageView
-                        android:src="@drawable/line"
-                        android:contentDescription="line_5"
-                        android:paddingHorizontal="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Old Password"
-                                android:textSize="18sp"
-                                android:textColor="@color/accent"
-                                android:layout_marginTop="10dp"
-                                />
-                            <EditText
-                                android:id="@+id/etOldPassword"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:hint="Old Password"
-                                android:inputType="textPassword"
-                                android:textColorHint="@color/primary_grey"
-                                android:textColor="@color/text_color"
-                                android:background="@drawable/input_background"
-                                />
-                    <ImageView
-                        android:src="@drawable/line"
-                        android:contentDescription="line_5"
-                        android:paddingHorizontal="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                                android:orientation="vertical"
+                                android:background="@color/white">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Name"
+                                    android:textSize="18sp"
+                                    android:textColor="@color/accent"
+                                    android:layout_marginTop="10dp"
+                                    />
+                                <EditText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:id="@+id/etProfileName"
+                                    android:textColor="@color/text_color"
+                                    android:textColorHint="@color/primary_grey"
+                                    android:hint="Name"
+                                    android:textSize="18sp"
+                                    android:background="@drawable/input_background"/>
+
+                                <ImageView
+                                    android:src="@drawable/line"
+                                    android:contentDescription="line_5"
+                                    android:paddingHorizontal="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Surname"
+                                    android:textSize="18sp"
+                                    android:textColor="@color/accent"
+                                    android:layout_marginTop="10dp"
+                                    />
+                                <EditText
+                                    android:id="@+id/etProfileSurname"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:textColor="@color/text_color"
+                                    android:textColorHint="@color/primary_grey"
+                                    android:textSize="18sp"
+                                    android:hint="Surname"
+                                    android:background="@drawable/input_background"/>
+                                <ImageView
+                                    android:src="@drawable/line"
+                                    android:contentDescription="line_5"
+                                    android:paddingHorizontal="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Old Password"
+                                    android:textSize="18sp"
+                                    android:textColor="@color/accent"
+                                    android:layout_marginTop="10dp"
+                                    />
+                                <EditText
+                                    android:id="@+id/etOldPassword"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:hint="Old Password"
+                                    android:inputType="textPassword"
+                                    android:textColorHint="@color/primary_grey"
+                                    android:textColor="@color/text_color"
+                                    android:background="@drawable/input_background"
+                                    />
+                                <ImageView
+                                    android:src="@drawable/line"
+                                    android:contentDescription="line_5"
+                                    android:paddingHorizontal="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -267,18 +274,20 @@
                                     android:layout_marginTop="10dp"
                                     />
 
-                            <EditText
-                                android:id="@+id/etNewPassword"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:hint="New Password"
-                                android:inputType="textPassword"
-                                android:textColorHint="@color/primary_grey"
-                                android:textColor="@color/text_color"
-                                android:background="@drawable/input_background"
-                                android:layout_marginBottom="20dp"/>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
+                                <EditText
+                                    android:id="@+id/etNewPassword"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:hint="New Password"
+                                    android:inputType="textPassword"
+                                    android:textColorHint="@color/primary_grey"
+                                    android:textColor="@color/text_color"
+                                    android:background="@drawable/input_background"
+                                    android:layout_marginBottom="20dp"/>
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
+
                 </LinearLayout>
 
 
@@ -299,13 +308,15 @@
                         android:layout_height="wrap_content"
                         android:layout_columnWeight="1"
                         android:text="Edit"
-                        android:backgroundTint="@color/primary_blue"
                         android:textColor="@color/text_color"
                         style="@android:style/Widget.Button"
-                        android:background="@drawable/btn_background_red"
+                        android:background="@drawable/btn_background_1"
                         android:layout_marginEnd="32dp"
                         android:layout_marginStart="32dp"
-                        android:layout_marginTop="16dp"/>
+                        android:layout_marginTop="16dp"
+                        android:textStyle="bold"
+                        android:textSize="18sp"
+                        android:padding="15dp"/>
 
                     <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btnBack"
@@ -319,7 +330,10 @@
                             android:background="@drawable/btn_background_red"
                             android:layout_marginEnd="32dp"
                             android:layout_marginStart="32dp"
-                            android:layout_marginTop="16dp"/>
+                            android:layout_marginTop="16dp"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:padding="15dp"/>
 
 
                </LinearLayout>

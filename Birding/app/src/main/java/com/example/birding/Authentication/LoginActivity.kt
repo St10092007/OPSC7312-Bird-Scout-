@@ -9,6 +9,7 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.*
 import com.example.birding.Home.HomeActivity
+import com.example.birding.Home.SplashActivity
 import com.example.birding.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -31,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
         if (currentUser != null) {
             Log.d("LoginActivity", "User is already logged in. Showing toast and navigating to HomeActivity.")
             Toast.makeText(this, "Log in Successful", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, HomeActivity::class.java)
+            val intent = Intent(this, SplashActivity::class.java)
             startActivity(intent)
         }
     }
@@ -72,22 +73,30 @@ class LoginActivity : AppCompatActivity() {
                 val email = emailEditText.text.toString()
                 val password = passwordEditText.text.toString()
 
-                if(TextUtils.isEmpty(email) || !isValidEmail(email))
-                {
-                    Toast.makeText(this,"Enter a valid email address",Toast.LENGTH_LONG).show();
-                    return@setOnClickListener;
-                }
+
+            if (TextUtils.isEmpty(email) || !isValidEmail(email)) {
+                emailEditText.error = "Enter a valid email address"
+                return@setOnClickListener
+            } else {
+                emailEditText.error = null
+            }
                 if(TextUtils.isEmpty(password))
                 {
-                    Toast.makeText(this,"Enter password",Toast.LENGTH_LONG).show();
+                    passwordEditText.error = "Enter Password "
                     return@setOnClickListener;
                 }
+                else {
+                    passwordEditText.error = null
+                }
+
                 // Sign in with Firebase Authentication
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener() { task ->
                         if (task.isSuccessful) {
+
+
                             Toast.makeText(this, "Logged in Successfully", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this, HomeActivity::class.java)
+                            val intent = Intent(this, SplashActivity::class.java)
                             startActivity(intent)
                         } else {
                             // If sign in fails, display a message to the user.

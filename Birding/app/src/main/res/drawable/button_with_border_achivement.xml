@@ -8,5 +8,5 @@
                 android:color="@color/background_grey" />
         </shape>
     </item>
-    <item android:drawable="@drawable/location" />
+    <item android:drawable="@drawable/medal" />
 </layer-list>

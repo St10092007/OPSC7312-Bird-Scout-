@@ -38,8 +38,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -52,6 +50,7 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.libraries.places.api.model.TypeFilter
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
+import com.google.firebase.database.*
 import org.json.JSONArray
 import org.json.JSONException
 import java.lang.Double.max
@@ -320,16 +319,48 @@ class NewObservationActivity : AppCompatActivity(), ObservationDeleteListener {
             // Format the ID string as "Observation: #012345"
             val formattedId = String.format("%07d", observationId.hashCode() and 0xffffff)
 
-            val sighting = BirdObservation(
-                formattedId,
-                selectedImageString,
-                species,
-                date,
-                selectedLocation,
-                notes,
-                observationType
-            )
-            saveObservationToFirebase(sighting)
+            // Fetch user's name and surname from the database
+            val user = FirebaseAuth.getInstance().currentUser
+            user?.let { currentUser ->
+                val userId = currentUser.uid
+                val userDbReference = database.getReference("Users").child(userId)
+
+                userDbReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val name = snapshot.child("name").getValue(String::class.java) ?: ""
+                        val surname = snapshot.child("surname").getValue(String::class.java) ?: ""
+
+                        val sighting = BirdObservation(
+                            formattedId,
+                            selectedImageString,
+                            species,
+                            date,
+                            selectedLocation,
+                            notes,
+                            observationType,
+                            "$name $surname"  // Combine name and surname
+                        )
+
+                        // Save the observation to Firebase
+                        saveObservationToFirebase(sighting)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@NewObservationActivity, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+//            val sighting = BirdObservation(
+//                formattedId,
+//                selectedImageString,
+//                species,
+//                date,
+//                selectedLocation,
+//                notes,
+//                observationType
+//            )
+//            saveObservationToFirebase(sighting)
 
 
         } else {

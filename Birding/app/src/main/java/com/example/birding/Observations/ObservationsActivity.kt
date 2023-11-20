@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.TooltipCompat
@@ -39,6 +40,8 @@ class ObservationsActivity : AppCompatActivity() , ObservationDeleteListener{
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var recyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
+    private lateinit var totalObservationsTextView: TextView
+
 
     private lateinit var observationAdapter: ObservationAdapter
     private val observationsList: MutableList<BirdObservation> = mutableListOf()
@@ -56,6 +59,8 @@ class ObservationsActivity : AppCompatActivity() , ObservationDeleteListener{
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = observationAdapter
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
+        totalObservationsTextView = findViewById(R.id.totalObservationsTextView)
+
 
 
 
@@ -197,14 +202,16 @@ class ObservationsActivity : AppCompatActivity() , ObservationDeleteListener{
                     val latitude = observationSnapshot.child("location").child("latitude").getValue(Double::class.java)
                     val longitude = observationSnapshot.child("location").child("longitude").getValue(Double::class.java)
                     val notes = observationSnapshot.child("notes").getValue(String::class.java)
+                    val fullName = observationSnapshot.child("fullName").getValue(String::class.java)
                     // Example: Handle null observationType
                     val observationType = observationSnapshot.child("observationType").getValue(String::class.java) ?: "Unknown"
 
-                    if (observationId != null && species != null && dateTime != null && latitude != null && longitude != null && notes != null && observationType != null) {
+                    if (observationId != null && species != null && dateTime != null && latitude != null && longitude != null && notes != null && observationType != null && fullName!=null) {
                         val location = LatLng(latitude, longitude)
-                        val observation = BirdObservation(observationId, image, species, dateTime, location, notes, observationType)
+                        val observation = BirdObservation(observationId, image, species, dateTime, location, notes, observationType,fullName)
                         newObservationsList.add(observation)
                     }
+                    totalObservationsTextView.text = "Total Observations :${newObservationsList.size}"
                     Log.d("ObservationsActivity", "Observation Data: $species, $dateTime, $latitude, $longitude, $notes, $observationType")
                 }
 

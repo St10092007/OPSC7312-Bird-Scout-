@@ -68,6 +68,8 @@ class ObservationAdapter(private val observations: MutableList<BirdObservation>,
         private val dateTimeTextView: TextView = itemView.findViewById(R.id.dateTimeTextView)
         private val locationTextView: TextView = itemView.findViewById(R.id.locationTextView)
         private val observationType: TextView = itemView.findViewById(R.id.observation_type)
+        private val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
+
         private val observationIdTextView: TextView = itemView.findViewById(R.id.observationIdTextView)
         private val notesTextView: TextView = itemView.findViewById(R.id.notesTextView)
         private val arrowButton: ImageButton = itemView.findViewById(R.id.arrow_button)
@@ -121,7 +123,7 @@ class ObservationAdapter(private val observations: MutableList<BirdObservation>,
 
             observationIdTextView.text="Observation: #${observation.observationId}"
 
-
+            nameTextView.text = "${observation.fullName}"
 
             hiddenLayout.visibility = View.GONE
             arrowButton.setImageResource(R.drawable.down_arrow)

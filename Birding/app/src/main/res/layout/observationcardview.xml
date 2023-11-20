@@ -52,7 +52,6 @@
                                 android:id="@+id/nameTextView"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textAlignment="center"
                                 android:text="Halalisani Mdlalose"
                                 android:textSize="14sp"
                                 android:textColor="@color/text_color"/>
