@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.TooltipCompat
+import com.example.birding.Achievement.AchievementsActivity
 import com.example.birding.Hotspot.HotspotsActivity
+import com.example.birding.Observations.BirdObservation
+import com.example.birding.Observations.ObservationManager
 import com.example.birding.Observations.ObservationsActivity
 import com.example.birding.R
 import com.example.birding.Settings.SettingsActivity
@@ -17,6 +20,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var exploreButton : Button
     private lateinit var observationsButton : Button
     private lateinit var settingsButton : Button
+    private val observationsList: MutableList<BirdObservation> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,12 +55,16 @@ class HomeActivity : AppCompatActivity() {
         val hotspotsMenuItem = bottomNavigationView.menu.findItem(R.id.menu_hotspots)
         val homeMenuItem = bottomNavigationView.menu.findItem(R.id.menu_home)
         val settingsMenuItem = bottomNavigationView.menu.findItem(R.id.menu_settings)
+        val achievementMenuItem = bottomNavigationView.menu.findItem(R.id.menu_achievement)
+
 
         // Set tooltips for navigation items
         observationMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Observations") }
         hotspotsMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Hotspots") }
         homeMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Home") }
         settingsMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Settings") }
+        achievementMenuItem.actionView?.let { TooltipCompat.setTooltipText(it, "Achievements") }
+
 
         // Bottom navigation item click listener
         bottomNavigationView.setOnNavigationItemSelectedListener { menuItem ->
@@ -71,6 +79,12 @@ class HomeActivity : AppCompatActivity() {
                 }
                 R.id.menu_observations -> {
                     startActivity(Intent(this, ObservationsActivity::class.java))
+                    true
+                }
+                R.id.menu_achievement -> {
+                    val intent = Intent(this, AchievementsActivity::class.java)
+//                    intent.putExtra("observationCount", ObservationManager.getObservationCount())
+                    startActivity(intent)
                     true
                 }
                 R.id.menu_settings -> {

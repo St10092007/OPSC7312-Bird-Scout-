@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp"
+    app:cardBackgroundColor="@android:color/white"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="8dp"
+    android:backgroundTint="@color/background_grey"
+    android:layout_gravity="center_horizontal">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/base_cardview"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+    <ImageView
+        android:id="@+id/ivTrophy"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/trophy"
+        android:layout_gravity="right"
+        android:contentDescription="Achievement 1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/tvProgressCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="8dp"
+            android:text="1/150"
+            android:textColor="@color/text_color"
+            android:textSize="14sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ivTrophy"
+            app:layout_constraintStart_toEndOf="@+id/tvProgressCount"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Icon -->
+            <ImageView
+                android:id="@+id/ivIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:contentDescription="Achievement 1"
+                android:src="@drawable/dove" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="Achievement #"
+                android:textColor="@color/text_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:text="Achievement Description"
+                android:textColor="@color/text_color"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvCompletionStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:text="Complete"
+                android:textColor="@color/text_color"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

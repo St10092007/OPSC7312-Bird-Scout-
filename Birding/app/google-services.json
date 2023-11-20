@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "422260711153",
+    "firebase_url": "https://bird-scout-37eca-default-rtdb.firebaseio.com",
+    "project_id": "bird-scout-37eca",
+    "storage_bucket": "bird-scout-37eca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422260711153:android:8cfd5bc19e2437f6d2d350",
+        "android_client_info": {
+          "package_name": "com.example.birding"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4ua5xNZfI2LAxUnrKUOAHAHZNqODQStI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Settings.PrivacyPolicyActivity"
+    android:background="@color/background_grey">
+
+    <ImageView
+        android:id="@+id/ivLogoBackground"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="5dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@drawable/logobackground"
+        android:layout_gravity="center_horizontal"/>
+
+    <TextView
+        android:id="@+id/tvPrivacyPolicyHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Privacy Policy"
+        android:textSize="24sp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/accent"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"/>
+
+    <!-- Privacy Policy Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tvPrivacyPolicyContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"/>
+    </ScrollView>
+
+    <!-- View Full Privacy Policy Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnViewFullPrivacyPolicy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Button"
+        android:background="@drawable/btn_background_1"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="View Full Privacy Policy"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:padding="15dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@android:style/Widget.Button"
+        android:background="@drawable/btn_background_red"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="back"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:padding="15dp"/>
+
+</LinearLayout>
+
+
+

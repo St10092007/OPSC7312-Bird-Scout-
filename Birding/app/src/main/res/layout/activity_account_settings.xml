@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Settings.AccountSettingsActivity"
+    android:background="@color/background_grey">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/ivLogoBackground"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:scaleType="fitXY"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/top_background" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Account Settings"
+                    android:layout_marginTop="16dp"
+                    android:textSize="30sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@+id/ivLogoBackground"
+                    app:layout_constraintStart_toStartOf="@+id/ivLogoBackground"
+                    app:layout_constraintTop_toBottomOf="@+id/ivLogoBackground"
+                    android:textColor="@color/text_color"/>
+
+                <LinearLayout
+                    android:id="@+id/measurementUnitsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView"
+                    >
+
+                    <TextView
+                        android:id="@+id/tvMeasurementUnits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Measurement Units"
+                        android:textSize="25sp"
+                        android:textColor="@color/accent"
+                        android:layout_marginTop="10dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/input_background">
+                    <RadioGroup
+                        android:id="@+id/rgMeasurementUnits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_metric_icon1"
+                            android:contentDescription="Metric Icon"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="8dp"/>
+
+                        <RadioButton
+                            android:id="@+id/rbMetric"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Metric (Kilometres)"
+                            android:checked="true"
+                            android:textColor="@color/text_color" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_imperial_icon1"
+                            android:contentDescription="Imperial Icon"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="8dp"/>
+
+                        <RadioButton
+                            android:id="@+id/rbImperial"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Imperial (Miles)"
+                            android:textColor="@color/text_color" />
+                    </RadioGroup>
+                </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/maximumDistanceLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintEnd_toEndOf="@id/measurementUnitsLayout"
+                    app:layout_constraintStart_toStartOf="@id/measurementUnitsLayout"
+                    app:layout_constraintTop_toBottomOf="@+id/measurementUnitsLayout"
+                    >
+                    <TextView
+                        android:id="@+id/tvMaximumDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Maximum Distance"
+                        android:textSize="25sp"
+                        android:textColor="@color/accent"
+                        android:layout_marginTop="10dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/input_background">
+
+                        <TextView
+                            android:id="@+id/tvDistanceValue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10"
+                            android:textSize="20dp"
+                            android:textColor="@color/text_color"
+                            android:padding="10dp"
+                            android:gravity="center"/>
+
+                        <SeekBar
+                            android:id="@+id/sbDistanceSeekBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:max="400"
+                            android:padding="10dp"
+                            android:layout_gravity="center"
+                            />
+                    </LinearLayout>
+
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnReturn"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        style="@android:style/Widget.Button"
+                        android:background="@drawable/btn_background_red"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:text="Save"
+                        android:textColor="#ffffff"
+                        android:textStyle="bold"
+                        android:textSize="18sp"/>
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

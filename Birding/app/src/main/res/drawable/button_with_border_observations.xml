@@ -4,8 +4,8 @@
         <shape android:shape="rectangle">
             <solid android:color="@color/primary_blue" />
             <stroke
-                android:width="3dp"
-                android:color="@color/accent" />
+                android:width="5dp"
+                android:color="@color/background_grey" />
         </shape>
     </item>
     <item android:drawable="@drawable/binoculars" />

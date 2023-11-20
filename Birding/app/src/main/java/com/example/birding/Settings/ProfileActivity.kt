@@ -17,6 +17,7 @@ class ProfileActivity : AppCompatActivity() {
 
     // UI elements
     private lateinit var editProfileName: EditText
+    private lateinit var llEditProfile: LinearLayout
     private lateinit var editProfileSurname: EditText
     private lateinit var editOldPassword: EditText
     private lateinit var editNewPassword: EditText
@@ -46,8 +47,10 @@ class ProfileActivity : AppCompatActivity() {
         editNewPassword = findViewById(R.id.etNewPassword)
         saveProfileBtn = findViewById(R.id.btnSave)
         backBtn = findViewById(R.id.btnBack)
+        llEditProfile = findViewById(R.id.llEditProfile)
 
         progressBar = findViewById(R.id.progressBar)
+        llEditProfile.visibility = View.GONE
         progressBar.visibility = View.GONE
 
         // Initially, edit fields are invisible
@@ -76,6 +79,7 @@ class ProfileActivity : AppCompatActivity() {
             } else {
                 setEditTextVisibility(true)
                 saveProfileBtn.text = "Save"
+                backBtn.text = "Cancel"
             }
 
             // Toggle the editing mode
@@ -122,6 +126,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun setEditTextVisibility(visible: Boolean) {
         val visibility = if (visible) View.VISIBLE else View.INVISIBLE
+        llEditProfile.visibility = visibility
         editProfileName.visibility = visibility
         editProfileSurname.visibility = visibility
         editOldPassword.visibility = visibility
@@ -159,6 +164,7 @@ class ProfileActivity : AppCompatActivity() {
 
                 setEditTextVisibility(false)
                 saveProfileBtn.text = "Edit"
+                backBtn.text = "Back"
                 isEditing = false
                 isChangesSaved = false
                 fetchUserData()

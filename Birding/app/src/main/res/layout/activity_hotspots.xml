@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Hotspot.HotspotsActivity"
-    android:background="@color/primary_grey">
+    android:background="@color/background_grey">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -85,16 +85,41 @@
                     android:layout_marginTop="10dp"
                     android:textColor="@color/accent" />
             </LinearLayout>
-
             <Button
                 android:id="@+id/btnHotspotDirection"
-                android:backgroundTint="@color/secondary"
                 android:text="Get Directions"
                 android:layout_width="wrap_content"
                 android:layout_height="70dp"
                 android:visibility="gone"
                 android:layout_gravity="end"
                 />
+            <LinearLayout
+                android:id="@+id/birdSpeciesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvBirdSpeciesTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bird Species"
+                    android:textSize="18sp"
+                    android:gravity="start"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/accent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewBirdSpecies"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:visibility="visible" />
+
+            </LinearLayout>
         </LinearLayout>
     </FrameLayout>
 

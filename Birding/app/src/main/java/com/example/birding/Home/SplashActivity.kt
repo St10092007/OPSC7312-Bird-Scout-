@@ -11,7 +11,7 @@ import com.example.birding.Authentication.RegisterActivity
 import com.example.birding.R
 
 
-val SPLASH_DELAY: Long = 1000
+val SPLASH_DELAY: Long = 3000
 
 //The following code was taken and modified from android developers.
 //Author : android developers
@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             logoImageView.visibility = View.GONE
-            startActivity(Intent(this, LoginActivity::class.java))
+            startActivity(Intent(this, HomeActivity::class.java))
             finish()
         }, SPLASH_DELAY)
     }

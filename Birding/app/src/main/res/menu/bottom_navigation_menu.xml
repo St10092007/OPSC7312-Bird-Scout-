@@ -20,6 +20,11 @@
     <!--    "Icon made by Freepik from www.flaticon.com"-->
 
     <item
+        android:id="@+id/menu_achievement"
+        android:title="Achievement"
+        android:icon="@drawable/medal" />
+    <!--    "Icon made by Flaticon from www.flaticon.com"-->
+    <item
         android:id="@+id/menu_settings"
         android:title="Settings"
         android:icon="@drawable/settings" />

@@ -6,25 +6,45 @@ import com.google.android.gms.maps.model.LatLng
 import java.util.*
 
 data class BirdObservation(
+    var observationId: String = "",
+    var image: String? = null,
     val species: String,
     val dateTime: String,
     val location: LatLng,
-    val notes: String
+    val notes: String,
+    val observationType: String,
+    val fullName: String,
+
 ) : Parcelable {
-    constructor() : this("", "", LatLng(0.0, 0.0), "")
+
+
+    constructor() : this("","","", "", LatLng(0.0, 0.0), "","","")
+    {}
+
 
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
+        parcel.readString(),
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readParcelable(LatLng::class.java.classLoader) ?: LatLng(0.0, 0.0),
-        parcel.readString() ?: ""
-    )
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        ""
+    ){}
+
+
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(observationId)
+        parcel.writeString(image)
         parcel.writeString(species)
         parcel.writeString(dateTime)
         parcel.writeParcelable(location, flags)
         parcel.writeString(notes)
+        parcel.writeString(observationType)
+        parcel.writeString(fullName)
+
     }
 
     override fun describeContents(): Int {
